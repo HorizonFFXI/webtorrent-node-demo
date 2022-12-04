@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog } from "electron";
 import log from "electron-log";
 import { createWindow } from "./createWindow";
-import downloadTorrent from "./workers/torrentDownload";
+import { downloadTorrent } from "./workers/torrent_main";
 
 // Extend console.log to also write to a log file in
 // \AppData\Roaming\HorizonXI-Launcher\logs\main.log
@@ -54,6 +54,7 @@ let window: BrowserWindow;
 app.on("ready", async () => {
   window = createWindow();
 
+  // Download a magnet link using a worker
   try {
     const results = await downloadTorrent({
       magnetLink:

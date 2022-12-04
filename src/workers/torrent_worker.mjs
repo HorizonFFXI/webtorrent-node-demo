@@ -1,11 +1,6 @@
-const {
-  Worker,
-  isMainThread,
-  parentPort,
-  workerData,
-} = require("worker_threads");
-const WebTorrent = require("webtorrent");
-const FSChunkStore = require("../lib/fs-chunk-store");
+import { isMainThread, parentPort, workerData } from "worker_threads";
+import WebTorrent from "webtorrent";
+import FSChunkStore from "fs-chunk-store";
 
 const MessageType = {
   UPLOAD_PROGRESS: "UPLOAD_PROGRESS",
@@ -14,43 +9,7 @@ const MessageType = {
   DOWNLOAD_ERROR: "DOWNLOAD_ERROR",
 };
 
-if (isMainThread) {
-  module.exports = function downloadTorrent({ magnetLink, path }) {
-    return new Promise((resolve, reject) => {
-      if (!magnetLink || !path) {
-        reject(new Error(`Provide magnetLink and path`));
-      }
-
-      const worker = new Worker(__filename, {
-        workerData: { magnetLink, path },
-      });
-
-      worker.on("error", reject);
-      worker.on("exit", (code) => {
-        if (code !== 0)
-          reject(new Error(`Worker stopped with exit code ${code}`));
-      });
-
-      worker.on("message", (message) => {
-        // console.log("message", message);
-
-        switch (message.type) {
-          case MessageType.DOWNLOAD_FINISHED:
-            resolve(message.data.magnetLink);
-            break;
-          case MessageType.DOWNLOAD_ERROR:
-            reject(new Error(message.data.error));
-            break;
-          case MessageType.DOWNLOAD_PROGRESS:
-          case MessageType.UPLOAD_PROGRESS:
-          default:
-            console.log(message);
-            break;
-        }
-      });
-    });
-  };
-} else {
+if (!isMainThread) {
   // Get parameters through workerData object
   const { magnetLink, path } = workerData;
 
