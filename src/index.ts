@@ -1,7 +1,7 @@
 import { app, BrowserWindow, dialog } from "electron";
 import log from "electron-log";
 import { createWindow } from "./createWindow";
-import { downloadTorrent } from "./workers/torrent_main";
+import { downloadTorrent } from "./workers";
 
 // Extend console.log to also write to a log file in
 // \AppData\Roaming\HorizonXI-Launcher\logs\main.log
