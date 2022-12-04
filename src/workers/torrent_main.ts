@@ -1,5 +1,4 @@
 import { Worker } from "worker_threads";
-
 const MessageType = {
   UPLOAD_PROGRESS: "UPLOAD_PROGRESS",
   DOWNLOAD_PROGRESS: "DOWNLOAD_PROGRESS",
@@ -29,27 +28,30 @@ export const downloadTorrent = ({
     );
 
     worker.on("error", reject);
-    worker.on("exit", (code) => {
+    worker.on("exit", (code: number) => {
       if (code !== 0)
         reject(new Error(`Worker stopped with exit code ${code}`));
     });
 
-    worker.on("message", (message) => {
-      // console.log("message", message);
+    worker.on(
+      "message",
+      (message: { type: keyof typeof MessageType; data: any }) => {
+        // console.log("message", message);
 
-      switch (message.type) {
-        case MessageType.DOWNLOAD_FINISHED:
-          resolve(message.data.magnetLink);
-          break;
-        case MessageType.DOWNLOAD_ERROR:
-          reject(new Error(message.data.error));
-          break;
-        case MessageType.DOWNLOAD_PROGRESS:
-        case MessageType.UPLOAD_PROGRESS:
-        default:
-          console.log(message);
-          break;
+        switch (message.type) {
+          case MessageType.DOWNLOAD_FINISHED:
+            resolve(message.data.magnetLink);
+            break;
+          case MessageType.DOWNLOAD_ERROR:
+            reject(new Error(message.data.error));
+            break;
+          case MessageType.DOWNLOAD_PROGRESS:
+          case MessageType.UPLOAD_PROGRESS:
+          default:
+            console.log(message);
+            break;
+        }
       }
-    });
+    );
   });
 };
