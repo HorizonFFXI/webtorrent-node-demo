@@ -1,7 +1,8 @@
-const { workerData, parentPort } = require("worker_threads");
+const { workerData, BroadcastChannel, parentPort } = require("worker_threads");
 const WebTorrent = require("webtorrent");
 const FSChunkStore = require("../lib/fs-chunk-store");
 
+const bc = new BroadcastChannel("webtorrent");
 const client = new WebTorrent();
 
 const torrentId =
@@ -16,11 +17,19 @@ client.add(
   },
   function (torrent) {
     torrent.on("done", function () {
-      parentPort.postMessage("DONE!");
+      parentPort.postMessage("close");
+      bc.postMessage("done");
+      bc.close();
     });
 
     torrent.on("error", function () {
-      parentPort.postMessage("ERROR!");
+      parentPort.postMessage("close");
+      bc.postMessage("error");
+      bc.close();
+    });
+
+    torrent.on("download", function (bytes) {
+      bc.postMessage(bytes);
     });
   }
 );

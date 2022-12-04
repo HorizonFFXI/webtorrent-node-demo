@@ -2184,6 +2184,11 @@
   "resolved" "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
   "version" "1.1.1"
 
+"electron-log@^4.4.8":
+  "integrity" "sha512-QQ4GvrXO+HkgqqEOYbi+DHL7hj5JM+nHi/j+qrN9zeeXVKy8ZABgbu4CnG+BBqDZ2+tbeq9tUC4DZfIWFU5AZA=="
+  "resolved" "https://registry.npmjs.org/electron-log/-/electron-log-4.4.8.tgz"
+  "version" "4.4.8"
+
 "electron-packager@^17.1.1":
   "integrity" "sha512-r1NDtlajsq7gf2EXgjRfblCVPquvD2yeg+6XGErOKblvxOpDi0iulZLVhgYDP4AEF1P5/HgbX/vwjlkEv7PEIQ=="
   "resolved" "https://registry.npmjs.org/electron-packager/-/electron-packager-17.1.1.tgz"
