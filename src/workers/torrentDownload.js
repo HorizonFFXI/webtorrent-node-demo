@@ -1,35 +1,145 @@
-const { workerData, BroadcastChannel, parentPort } = require("worker_threads");
+const {
+  Worker,
+  isMainThread,
+  parentPort,
+  workerData,
+} = require("worker_threads");
 const WebTorrent = require("webtorrent");
 const FSChunkStore = require("../lib/fs-chunk-store");
 
-const bc = new BroadcastChannel("webtorrent");
-const client = new WebTorrent();
+const MessageType = {
+  UPLOAD_PROGRESS: "UPLOAD_PROGRESS",
+  DOWNLOAD_PROGRESS: "DOWNLOAD_PROGRESS",
+  DOWNLOAD_FINISHED: "DOWNLOAD_FINISHED",
+  DOWNLOAD_ERROR: "DOWNLOAD_ERROR",
+};
 
-const torrentId =
-  "magnet:?xt=urn:btih:08ada5a7a6183aae1e09d831df6748d566095a10&dn=Sintel&tr=udp%3A%2F%2Fexplodie.org%3A6969&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.empire-js.us%3A1337&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=wss%3A%2F%2Ftracker.btorrent.xyz&tr=wss%3A%2F%2Ftracker.fastcast.nz&tr=wss%3A%2F%2Ftracker.openwebtorrent.com&ws=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2F&xs=https%3A%2F%2Fwebtorrent.io%2Ftorrents%2Fsintel.torrent";
+if (isMainThread) {
+  module.exports = function downloadTorrent({ magnetLink, path }) {
+    return new Promise((resolve, reject) => {
+      if (!magnetLink || !path) {
+        reject(new Error(`Provide magnetLink and path`));
+      }
 
-client.add(
-  torrentId,
-  {
-    strategy: "rarest",
-    store: FSChunkStore,
-    path: workerData.path,
-  },
-  function (torrent) {
-    torrent.on("done", function () {
-      parentPort.postMessage("close");
-      bc.postMessage("done");
-      bc.close();
+      const worker = new Worker(__filename, {
+        workerData: { magnetLink, path },
+      });
+
+      worker.on("error", reject);
+      worker.on("exit", (code) => {
+        if (code !== 0)
+          reject(new Error(`Worker stopped with exit code ${code}`));
+      });
+
+      worker.on("message", (message) => {
+        // console.log("message", message);
+
+        switch (message.type) {
+          case MessageType.DOWNLOAD_FINISHED:
+            resolve(message.data.magnetLink);
+            break;
+          case MessageType.DOWNLOAD_ERROR:
+            reject(new Error(message.data.error));
+            break;
+          case MessageType.DOWNLOAD_PROGRESS:
+          case MessageType.UPLOAD_PROGRESS:
+          default:
+            console.log(message);
+            break;
+        }
+      });
     });
+  };
+} else {
+  // Get parameters through workerData object
+  const { magnetLink, path } = workerData;
 
-    torrent.on("error", function () {
-      parentPort.postMessage("close");
-      bc.postMessage("error");
-      bc.close();
-    });
+  const THROTTLE_BYTES = 5 * 1e6; // 5mb in bytes
 
-    torrent.on("download", function (bytes) {
-      bc.postMessage(bytes);
-    });
-  }
-);
+  // Create a webtorrent client
+  const client = new WebTorrent();
+
+  client.add(
+    magnetLink,
+    {
+      strategy: "rarest",
+      store: FSChunkStore,
+      path,
+    },
+    function (torrent) {
+      // Throttle progress messages
+      let _downloadBytes = 0;
+      torrent.on("download", function (bytes) {
+        _downloadBytes += bytes;
+
+        if (_downloadBytes >= THROTTLE_BYTES) {
+          parentPort.postMessage({
+            type: MessageType.DOWNLOAD_PROGRESS,
+            data: {
+              magnetLink,
+              downloaded: torrent.downloaded,
+              downloadSpeed: torrent.downloadSpeed,
+              progress: torrent.progress,
+            },
+          });
+          _downloadBytes = 0;
+        }
+      });
+
+      // Throttle progress messages
+      let _uploadBytes = 0;
+      torrent.on("uploaded", function (bytes) {
+        _uploadBytes += bytes;
+
+        if (_uploadBytes >= THROTTLE_BYTES) {
+          parentPort.postMessage({
+            type: MessageType.UPLOAD_PROGRESS,
+            data: {
+              magnetLink,
+              downloaded: torrent.uploaded,
+              downloadSpeed: torrent.uploadSpeed,
+              progress: torrent.ratio,
+            },
+          });
+          _uploadBytes = 0;
+        }
+      });
+
+      torrent.on("done", function () {
+        // Set the last progress update so it fills to 100%
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_PROGRESS,
+          data: {
+            magnetLink,
+            downloaded: torrent.downloaded,
+            downloadSpeed: torrent.downloadSpeed,
+            progress: torrent.progress,
+          },
+        });
+
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_FINISHED,
+          data: {
+            magnetLink,
+          },
+        });
+      });
+
+      torrent.on("error", function (error) {
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_ERROR,
+          data: {
+            error,
+          },
+        });
+      });
+    }
+  );
+
+  process.on("exit", () =>
+    parentPort.postMessage({
+      type: "ETC",
+      data: "worker thread (inside) exited",
+    })
+  );
+}
