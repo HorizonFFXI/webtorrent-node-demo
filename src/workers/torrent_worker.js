@@ -1,24 +1,21 @@
-import { isMainThread, parentPort, workerData } from "worker_threads";
+const { isMainThread, parentPort, workerData } = require("worker_threads");
 
 /************************************************************************************
  * MERGE
  *********************************************************************************/
- import { createRequire } from 'module';const require = createRequire(import.meta.url);
+
  var __create = Object.create;
  var __defProp = Object.defineProperty;
  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
  var __getOwnPropNames = Object.getOwnPropertyNames;
  var __getProtoOf = Object.getPrototypeOf;
  var __hasOwnProp = Object.prototype.hasOwnProperty;
- var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
- }) : x)(function(x) {
-   if (typeof require !== "undefined")
-     return require.apply(this, arguments);
-   throw new Error('Dynamic require of "' + x + '" is not supported');
- });
- var __commonJS = (cb, mod) => function __require2() {
+ var __commonJS = (cb, mod) => function __require() {
    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+ };
+ var __export = (target, all) => {
+   for (var name in all)
+     __defProp(target, name, { get: all[name], enumerable: true });
  };
  var __copyProps = (to, from, except, desc) => {
    if (from && typeof from === "object" || typeof from === "function") {
@@ -32,11 +29,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
    mod
  ));
+ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
  
  // node_modules/simple-concat/index.js
  var require_simple_concat = __commonJS({
-   "node_modules/simple-concat/index.js"(exports, module) {
-     module.exports = function(stream, cb) {
+   "node_modules/simple-concat/index.js"(exports, module2) {
+     module2.exports = function(stream, cb) {
        var chunks = [];
        stream.on("data", function(chunk) {
          chunks.push(chunk);
@@ -57,8 +55,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bencode/lib/util.js
  var require_util = __commonJS({
-   "node_modules/bencode/lib/util.js"(exports, module) {
-     var util = module.exports;
+   "node_modules/bencode/lib/util.js"(exports, module2) {
+     var util = module2.exports;
      util.digitCount = function digitCount(value) {
        const sign = value < 0 ? 1 : 0;
        value = Math.abs(Number(value || 1));
@@ -90,7 +88,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bencode/lib/encode.js
  var require_encode = __commonJS({
-   "node_modules/bencode/lib/encode.js"(exports, module) {
+   "node_modules/bencode/lib/encode.js"(exports, module2) {
      var { getType } = require_util();
      function encode(data, buffer, offset) {
        const buffers = [];
@@ -213,13 +211,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        buffers.push(buffE);
      };
-     module.exports = encode;
+     module2.exports = encode;
    }
  });
  
  // node_modules/bencode/lib/decode.js
  var require_decode = __commonJS({
-   "node_modules/bencode/lib/decode.js"(exports, module) {
+   "node_modules/bencode/lib/decode.js"(exports, module2) {
      var INTEGER_START = 105;
      var STRING_DELIM = 58;
      var DICTIONARY_START = 100;
@@ -326,13 +324,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        decode.position = end;
        return decode.encoding ? decode.data.toString(decode.encoding, sep, end) : decode.data.slice(sep, end);
      };
-     module.exports = decode;
+     module2.exports = decode;
    }
  });
  
  // node_modules/bencode/lib/encoding-length.js
  var require_encoding_length = __commonJS({
-   "node_modules/bencode/lib/encoding-length.js"(exports, module) {
+   "node_modules/bencode/lib/encoding-length.js"(exports, module2) {
      var { digitCount, getType } = require_util();
      function listLength(list) {
        let length = 1 + 1;
@@ -395,14 +393,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
            throw new TypeError(`Unsupported value of type "${type}"`);
        }
      }
-     module.exports = encodingLength;
+     module2.exports = encodingLength;
    }
  });
  
  // node_modules/bencode/lib/index.js
  var require_lib = __commonJS({
-   "node_modules/bencode/lib/index.js"(exports, module) {
-     var bencode = module.exports;
+   "node_modules/bencode/lib/index.js"(exports, module2) {
+     var bencode = module2.exports;
      bencode.encode = require_encode();
      bencode.decode = require_decode();
      bencode.byteLength = bencode.encodingLength = require_encoding_length();
@@ -411,7 +409,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/block-iterator/index.js
  var require_block_iterator = __commonJS({
-   "node_modules/block-iterator/index.js"(exports, module) {
+   "node_modules/block-iterator/index.js"(exports, module2) {
      function concat(chunks, size) {
        if (typeof chunks[0] === "string")
          return chunks.join("");
@@ -426,7 +424,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return b;
      }
-     module.exports = async function* (iterator, size = 512, opts = {}) {
+     module2.exports = async function* (iterator, size = 512, opts = {}) {
        if (typeof size === "object") {
          opts = size;
          size = opts.size;
@@ -458,8 +456,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/piece-length/index.js
  var require_piece_length = __commonJS({
-   "node_modules/piece-length/index.js"(exports, module) {
-     module.exports = length;
+   "node_modules/piece-length/index.js"(exports, module2) {
+     module2.exports = length;
      function length(bytes) {
        return Math.max(16384, 1 << Math.log2(bytes < 1024 ? 1 : bytes / 1024) + 0.5 | 0);
      }
@@ -468,10 +466,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/is-file/index.js
  var require_is_file = __commonJS({
-   "node_modules/is-file/index.js"(exports, module) {
+   "node_modules/is-file/index.js"(exports, module2) {
      "use strict";
-     var fs2 = __require("fs");
-     module.exports = function isFile(path2, cb) {
+     var fs2 = require("fs");
+     module2.exports = function isFile(path2, cb) {
        if (!cb)
          return isFileSync(path2);
        fs2.stat(path2, function(err, stats) {
@@ -480,7 +478,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return cb(null, stats.isFile());
        });
      };
-     module.exports.sync = isFileSync;
+     module2.exports.sync = isFileSync;
      function isFileSync(path2) {
        return fs2.existsSync(path2) && fs2.statSync(path2).isFile();
      }
@@ -489,7 +487,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/junk/index.js
  var require_junk = __commonJS({
-   "node_modules/junk/index.js"(exports, module) {
+   "node_modules/junk/index.js"(exports, module2) {
      "use strict";
      var blacklist = [
        "^npm-debug\\.log$",
@@ -514,14 +512,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      exports.regex = new RegExp(blacklist.join("|"));
      exports.is = (filename) => exports.regex.test(filename);
      exports.not = (filename) => !exports.is(filename);
-     exports.default = module.exports;
+     exports.default = module2.exports;
    }
  });
  
  // node_modules/join-async-iterator/index.js
  var require_join_async_iterator = __commonJS({
-   "node_modules/join-async-iterator/index.js"(exports, module) {
-     module.exports = async function* (iterators) {
+   "node_modules/join-async-iterator/index.js"(exports, module2) {
+     module2.exports = async function* (iterators) {
        for (let iterator of iterators) {
          if (typeof iterator === "function")
            iterator = iterator();
@@ -533,9 +531,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/queue-microtask/index.js
  var require_queue_microtask = __commonJS({
-   "node_modules/queue-microtask/index.js"(exports, module) {
+   "node_modules/queue-microtask/index.js"(exports, module2) {
      var promise;
-     module.exports = typeof queueMicrotask === "function" ? queueMicrotask.bind(typeof window !== "undefined" ? window : global) : (cb) => (promise || (promise = Promise.resolve())).then(cb).catch((err) => setTimeout(() => {
+     module2.exports = typeof queueMicrotask === "function" ? queueMicrotask.bind(typeof window !== "undefined" ? window : global) : (cb) => (promise || (promise = Promise.resolve())).then(cb).catch((err) => setTimeout(() => {
        throw err;
      }, 0));
    }
@@ -543,8 +541,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/run-parallel/index.js
  var require_run_parallel = __commonJS({
-   "node_modules/run-parallel/index.js"(exports, module) {
-     module.exports = runParallel;
+   "node_modules/run-parallel/index.js"(exports, module2) {
+     module2.exports = runParallel;
      var queueMicrotask3 = require_queue_microtask();
      function runParallel(tasks, cb) {
        let results, pending, keys;
@@ -596,8 +594,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/simple-sha1/index.js
  var require_simple_sha1 = __commonJS({
-   "node_modules/simple-sha1/index.js"(exports, module) {
-     var crypto = __require("crypto");
+   "node_modules/simple-sha1/index.js"(exports, module2) {
+     var crypto = require("crypto");
      function sha1(buf, cb) {
        const hash = sha1sync(buf);
        process.nextTick(function() {
@@ -607,8 +605,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function sha1sync(buf) {
        return crypto.createHash("sha1").update(buf).digest("hex");
      }
-     module.exports = sha1;
-     module.exports.sync = sha1sync;
+     module2.exports = sha1;
+     module2.exports.sync = sha1sync;
    }
  });
  
@@ -643,8 +641,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/wrappy/wrappy.js
  var require_wrappy = __commonJS({
-   "node_modules/wrappy/wrappy.js"(exports, module) {
-     module.exports = wrappy;
+   "node_modules/wrappy/wrappy.js"(exports, module2) {
+     module2.exports = wrappy;
      function wrappy(fn, cb) {
        if (fn && cb)
          return wrappy(fn)(cb);
@@ -674,10 +672,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/once/once.js
  var require_once = __commonJS({
-   "node_modules/once/once.js"(exports, module) {
+   "node_modules/once/once.js"(exports, module2) {
      var wrappy = require_wrappy();
-     module.exports = wrappy(once);
-     module.exports.strict = wrappy(onceStrict);
+     module2.exports = wrappy(once);
+     module2.exports.strict = wrappy(onceStrict);
      once.proto = once(function() {
        Object.defineProperty(Function.prototype, "once", {
          value: function() {
@@ -719,9 +717,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/create-torrent/get-files.js
  var require_get_files = __commonJS({
-   "node_modules/create-torrent/get-files.js"(exports, module) {
-     var corePath = __require("path");
-     var fs2 = __require("fs");
+   "node_modules/create-torrent/get-files.js"(exports, module2) {
+     var corePath = require("path");
+     var fs2 = require("fs");
      var junk = require_junk();
      var once = require_once();
      var parallel2 = require_run_parallel();
@@ -781,17 +779,17 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          cb(null, info);
        });
      }
-     module.exports = getFiles;
+     module2.exports = getFiles;
    }
  });
  
  // node_modules/create-torrent/index.js
  var require_create_torrent = __commonJS({
-   "node_modules/create-torrent/index.js"(exports, module) {
+   "node_modules/create-torrent/index.js"(exports, module2) {
      var bencode = require_lib();
      var blockIterator = require_block_iterator();
      var calcPieceLength = require_piece_length();
-     var corePath = __require("path");
+     var corePath = require("path");
      var isFile = require_is_file();
      var junk = require_junk();
      var joinIterator = require_join_async_iterator();
@@ -1006,7 +1004,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        }
        if (opts.announce === void 0 && opts.announceList === void 0) {
-         announceList2 = announceList2.concat(module.exports.announceList);
+         announceList2 = announceList2.concat(module2.exports.announceList);
        }
        if (typeof opts.urlList === "string")
          opts.urlList = [opts.urlList];
@@ -1079,23 +1077,23 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          yield chunk;
        }
      }
-     module.exports = createTorrent;
-     module.exports.parseInput = parseInput;
-     module.exports.announceList = announceList;
-     module.exports.isJunkPath = isJunkPath;
+     module2.exports = createTorrent;
+     module2.exports.parseInput = parseInput;
+     module2.exports.announceList = announceList;
+     module2.exports.isJunkPath = isJunkPath;
    }
  });
  
  // node_modules/ms/index.js
  var require_ms = __commonJS({
-   "node_modules/ms/index.js"(exports, module) {
+   "node_modules/ms/index.js"(exports, module2) {
      var s = 1e3;
      var m = s * 60;
      var h = m * 60;
      var d = h * 24;
      var w = d * 7;
      var y = d * 365.25;
-     module.exports = function(val, options) {
+     module2.exports = function(val, options) {
        options = options || {};
        var type = typeof val;
        if (type === "string" && val.length > 0) {
@@ -1204,7 +1202,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/debug/src/common.js
  var require_common = __commonJS({
-   "node_modules/debug/src/common.js"(exports, module) {
+   "node_modules/debug/src/common.js"(exports, module2) {
      function setup(env) {
        createDebug.debug = createDebug;
        createDebug.default = createDebug;
@@ -1361,13 +1359,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        createDebug.enable(createDebug.load());
        return createDebug;
      }
-     module.exports = setup;
+     module2.exports = setup;
    }
  });
  
  // node_modules/debug/src/browser.js
  var require_browser = __commonJS({
-   "node_modules/debug/src/browser.js"(exports, module) {
+   "node_modules/debug/src/browser.js"(exports, module2) {
      exports.formatArgs = formatArgs;
      exports.save = save;
      exports.load = load;
@@ -1470,7 +1468,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        return typeof document !== "undefined" && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance || typeof window !== "undefined" && window.console && (window.console.firebug || window.console.exception && window.console.table) || typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31 || typeof navigator !== "undefined" && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/);
      }
      function formatArgs(args) {
-       args[0] = (this.useColors ? "%c" : "") + this.namespace + (this.useColors ? " %c" : " ") + args[0] + (this.useColors ? "%c " : " ") + "+" + module.exports.humanize(this.diff);
+       args[0] = (this.useColors ? "%c" : "") + this.namespace + (this.useColors ? " %c" : " ") + args[0] + (this.useColors ? "%c " : " ") + "+" + module2.exports.humanize(this.diff);
        if (!this.useColors) {
          return;
        }
@@ -1518,8 +1516,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        } catch (error) {
        }
      }
-     module.exports = require_common()(exports);
-     var { formatters } = module.exports;
+     module2.exports = require_common()(exports);
+     var { formatters } = module2.exports;
      formatters.j = function(v) {
        try {
          return JSON.stringify(v);
@@ -1532,9 +1530,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/debug/src/node.js
  var require_node = __commonJS({
-   "node_modules/debug/src/node.js"(exports, module) {
-     var tty = __require("tty");
-     var util = __require("util");
+   "node_modules/debug/src/node.js"(exports, module2) {
+     var tty = require("tty");
+     var util = require("util");
      exports.init = init;
      exports.log = log;
      exports.formatArgs = formatArgs;
@@ -1548,7 +1546,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      );
      exports.colors = [6, 2, 3, 4, 5, 1];
      try {
-       const supportsColor = __require("supports-color");
+       const supportsColor = require("supports-color");
        if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
          exports.colors = [
            20,
@@ -1660,7 +1658,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          const colorCode = "\x1B[3" + (c < 8 ? c : "8;5;" + c);
          const prefix = `  ${colorCode};1m${name} \x1B[0m`;
          args[0] = prefix + args[0].split("\n").join("\n" + prefix);
-         args.push(colorCode + "m+" + module.exports.humanize(this.diff) + "\x1B[0m");
+         args.push(colorCode + "m+" + module2.exports.humanize(this.diff) + "\x1B[0m");
        } else {
          args[0] = getDate() + name + " " + args[0];
        }
@@ -1691,8 +1689,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          debug.inspectOpts[keys[i]] = exports.inspectOpts[keys[i]];
        }
      }
-     module.exports = require_common()(exports);
-     var { formatters } = module.exports;
+     module2.exports = require_common()(exports);
+     var { formatters } = module2.exports;
      formatters.o = function(v) {
        this.inspectOpts.colors = this.useColors;
        return util.inspect(v, this.inspectOpts).split("\n").map((str) => str.trim()).join(" ");
@@ -1706,28 +1704,28 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/debug/src/index.js
  var require_src = __commonJS({
-   "node_modules/debug/src/index.js"(exports, module) {
+   "node_modules/debug/src/index.js"(exports, module2) {
      if (typeof process === "undefined" || process.type === "renderer" || process.browser === true || process.__nwjs) {
-       module.exports = require_browser();
+       module2.exports = require_browser();
      } else {
-       module.exports = require_node();
+       module2.exports = require_node();
      }
    }
  });
  
  // node_modules/randombytes/index.js
  var require_randombytes = __commonJS({
-   "node_modules/randombytes/index.js"(exports, module) {
-     module.exports = __require("crypto").randomBytes;
+   "node_modules/randombytes/index.js"(exports, module2) {
+     module2.exports = require("crypto").randomBytes;
    }
  });
  
  // node_modules/k-bucket/index.js
  var require_k_bucket = __commonJS({
-   "node_modules/k-bucket/index.js"(exports, module) {
+   "node_modules/k-bucket/index.js"(exports, module2) {
      "use strict";
      var randomBytes = require_randombytes();
-     var { EventEmitter } = __require("events");
+     var { EventEmitter } = require("events");
      function arrayEquals(array1, array2) {
        if (array1 === array2) {
          return true;
@@ -1918,24 +1916,24 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.emit("updated", incumbent, selection);
        }
      };
-     module.exports = KBucket;
+     module2.exports = KBucket;
    }
  });
  
  // node_modules/k-rpc-socket/index.js
  var require_k_rpc_socket = __commonJS({
-   "node_modules/k-rpc-socket/index.js"(exports, module) {
-     var dgram = __require("dgram");
+   "node_modules/k-rpc-socket/index.js"(exports, module2) {
+     var dgram = require("dgram");
      var bencode = require_lib();
-     var isIP = __require("net").isIP;
-     var dns = __require("dns");
-     var util = __require("util");
-     var events = __require("events");
+     var isIP = require("net").isIP;
+     var dns = require("dns");
+     var util = require("util");
+     var events = require("events");
      var ETIMEDOUT = new Error("Query timed out");
      ETIMEDOUT.code = "ETIMEDOUT";
      var EUNEXPECTEDNODE = new Error("Unexpected node id");
      EUNEXPECTEDNODE.code = "EUNEXPECTEDNODE";
-     module.exports = RPC;
+     module2.exports = RPC;
      function RPC(opts) {
        if (!(this instanceof RPC))
          return new RPC(opts);
@@ -2132,12 +2130,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/k-rpc/index.js
  var require_k_rpc = __commonJS({
-   "node_modules/k-rpc/index.js"(exports, module) {
+   "node_modules/k-rpc/index.js"(exports, module2) {
      var socket = require_k_rpc_socket();
      var KBucket = require_k_bucket();
-     var events = __require("events");
+     var events = require("events");
      var randombytes2 = require_randombytes();
-     var util = __require("util");
+     var util = require("util");
      var K = 20;
      var MAX_CONCURRENCY = 16;
      var BOOTSTRAP_NODES = [
@@ -2145,7 +2143,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        { host: "router.utorrent.com", port: 6881 },
        { host: "dht.transmissionbt.com", port: 6881 }
      ];
-     module.exports = RPC;
+     module2.exports = RPC;
      function RPC(opts) {
        if (!(this instanceof RPC))
          return new RPC(opts);
@@ -2474,8 +2472,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/last-one-wins/index.js
  var require_last_one_wins = __commonJS({
-   "node_modules/last-one-wins/index.js"(exports, module) {
-     module.exports = function(work) {
+   "node_modules/last-one-wins/index.js"(exports, module2) {
+     module2.exports = function(work) {
        var pending = null;
        var callback = null;
        var callbacks = null;
@@ -2520,9 +2518,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/inherits/inherits_browser.js
  var require_inherits_browser = __commonJS({
-   "node_modules/inherits/inherits_browser.js"(exports, module) {
+   "node_modules/inherits/inherits_browser.js"(exports, module2) {
      if (typeof Object.create === "function") {
-       module.exports = function inherits(ctor, superCtor) {
+       module2.exports = function inherits(ctor, superCtor) {
          if (superCtor) {
            ctor.super_ = superCtor;
            ctor.prototype = Object.create(superCtor.prototype, {
@@ -2536,7 +2534,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        };
      } else {
-       module.exports = function inherits(ctor, superCtor) {
+       module2.exports = function inherits(ctor, superCtor) {
          if (superCtor) {
            ctor.super_ = superCtor;
            var TempCtor = function() {
@@ -2552,14 +2550,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/inherits/inherits.js
  var require_inherits = __commonJS({
-   "node_modules/inherits/inherits.js"(exports, module) {
+   "node_modules/inherits/inherits.js"(exports, module2) {
      try {
-       util = __require("util");
+       util = require("util");
        if (typeof util.inherits !== "function")
          throw "";
-       module.exports = util.inherits;
+       module2.exports = util.inherits;
      } catch (e) {
-       module.exports = require_inherits_browser();
+       module2.exports = require_inherits_browser();
      }
      var util;
    }
@@ -2567,10 +2565,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/lru/index.js
  var require_lru = __commonJS({
-   "node_modules/lru/index.js"(exports, module) {
-     var events = __require("events");
+   "node_modules/lru/index.js"(exports, module2) {
+     var events = require("events");
      var inherits = require_inherits();
-     module.exports = LRU;
+     module2.exports = LRU;
      function LRU(opts) {
        if (!(this instanceof LRU))
          return new LRU(opts);
@@ -2704,7 +2702,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/b4a/index.js
  var require_b4a = __commonJS({
-   "node_modules/b4a/index.js"(exports, module) {
+   "node_modules/b4a/index.js"(exports, module2) {
      function isBuffer(value) {
        return Buffer.isBuffer(value) || value instanceof Uint8Array;
      }
@@ -2794,7 +2792,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function readInt32LE(buffer, offset) {
        return toBuffer(buffer).readInt32LE(offset);
      }
-     module.exports = {
+     module2.exports = {
        isBuffer,
        isEncoding,
        alloc,
@@ -2830,10 +2828,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/record-cache/index.js
  var require_record_cache = __commonJS({
-   "node_modules/record-cache/index.js"(exports, module) {
+   "node_modules/record-cache/index.js"(exports, module2) {
      var b4a = require_b4a();
      var EMPTY = [];
-     module.exports = RecordCache;
+     module2.exports = RecordCache;
      function RecordSet() {
        this.list = [];
        this.map = /* @__PURE__ */ new Map();
@@ -2982,7 +2980,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bittorrent-dht/client.js
  var require_client = __commonJS({
-   "node_modules/bittorrent-dht/client.js"(exports, module) {
+   "node_modules/bittorrent-dht/client.js"(exports, module2) {
      var bencode = require_lib();
      var debug = require_src()("bittorrent-dht");
      var KBucket = require_k_bucket();
@@ -2992,7 +2990,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var randombytes2 = require_randombytes();
      var records = require_record_cache();
      var simpleSha1 = require_simple_sha1();
-     var { EventEmitter } = __require("events");
+     var { EventEmitter } = require("events");
      var ROTATE_INTERVAL = 5 * 60 * 1e3;
      var BUCKET_OUTDATED_TIMESPAN = 15 * 60 * 1e3;
      var DHT = class extends EventEmitter {
@@ -3699,13 +3697,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return Buffer.from(str, "hex");
        throw new Error("Pass a buffer or a string");
      }
-     module.exports = DHT;
+     module2.exports = DHT;
    }
  });
  
  // node_modules/mimic-response/index.js
  var require_mimic_response = __commonJS({
-   "node_modules/mimic-response/index.js"(exports, module) {
+   "node_modules/mimic-response/index.js"(exports, module2) {
      "use strict";
      var knownProperties = [
        "aborted",
@@ -3724,7 +3722,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        "trailers",
        "url"
      ];
-     module.exports = (fromStream, toStream) => {
+     module2.exports = (fromStream, toStream) => {
        if (toStream._readableState.autoDestroy) {
          throw new Error("The second stream must have the `autoDestroy` option set to `false`");
        }
@@ -3772,12 +3770,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/decompress-response/index.js
  var require_decompress_response = __commonJS({
-   "node_modules/decompress-response/index.js"(exports, module) {
+   "node_modules/decompress-response/index.js"(exports, module2) {
      "use strict";
-     var { Transform, PassThrough } = __require("stream");
-     var zlib = __require("zlib");
+     var { Transform, PassThrough } = require("stream");
+     var zlib = require("zlib");
      var mimicResponse = require_mimic_response();
-     module.exports = (response) => {
+     module2.exports = (response) => {
        const contentEncoding = (response.headers["content-encoding"] || "").toLowerCase();
        if (!["gzip", "deflate", "br"].includes(contentEncoding)) {
          return response;
@@ -3821,15 +3819,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/simple-get/index.js
  var require_simple_get = __commonJS({
-   "node_modules/simple-get/index.js"(exports, module) {
-     module.exports = simpleGet;
+   "node_modules/simple-get/index.js"(exports, module2) {
+     module2.exports = simpleGet;
      var concat = require_simple_concat();
      var decompressResponse = require_decompress_response();
-     var http = __require("http");
-     var https = __require("https");
+     var http = require("http");
+     var https = require("https");
      var once = require_once();
-     var querystring = __require("querystring");
-     var url = __require("url");
+     var querystring = require("querystring");
+     var url = require("url");
      var isStream = (o) => o !== null && typeof o === "object" && typeof o.pipe === "function";
      function simpleGet(opts, cb) {
        opts = Object.assign({ maxRedirects: 10 }, typeof opts === "string" ? { url: opts } : opts);
@@ -3935,8 +3933,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  var require_ip = __commonJS({
    "node_modules/ip/lib/ip.js"(exports) {
      var ip = exports;
-     var { Buffer: Buffer2 } = __require("buffer");
-     var os2 = __require("os");
+     var { Buffer: Buffer2 } = require("buffer");
+     var os2 = require("os");
      ip.toBuffer = function(ip2, buff, offset) {
        offset = ~~offset;
        var result;
@@ -4239,7 +4237,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ip-set/index.js
  var require_ip_set = __commonJS({
-   "node_modules/ip-set/index.js"(exports, module) {
+   "node_modules/ip-set/index.js"(exports, module2) {
      var ip = require_ip();
      var IPSetNode = class {
        constructor(start, end) {
@@ -4389,7 +4387,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return this.tree.contains(addr);
        }
      };
-     module.exports = IPSet;
+     module2.exports = IPSet;
    }
  });
  
@@ -4590,9 +4588,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/through/index.js
  var require_through = __commonJS({
-   "node_modules/through/index.js"(exports, module) {
-     var Stream = __require("stream");
-     exports = module.exports = through;
+   "node_modules/through/index.js"(exports, module2) {
+     var Stream = require("stream");
+     exports = module2.exports = through;
      through.through = through;
      function through(write, end, opts) {
        write = write || function(data) {
@@ -4683,10 +4681,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/split/index.js
  var require_split = __commonJS({
-   "node_modules/split/index.js"(exports, module) {
+   "node_modules/split/index.js"(exports, module2) {
      var through = require_through();
-     var Decoder = __require("string_decoder").StringDecoder;
-     module.exports = split;
+     var Decoder = require("string_decoder").StringDecoder;
+     module2.exports = split;
      function split(matcher, mapper, options) {
        var decoder = new Decoder();
        var soFar = "";
@@ -4736,14 +4734,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/load-ip-set/index.js
  var require_load_ip_set = __commonJS({
-   "node_modules/load-ip-set/index.js"(exports, module) {
-     var fs2 = __require("fs");
+   "node_modules/load-ip-set/index.js"(exports, module2) {
+     var fs2 = require("fs");
      var get = require_simple_get();
      var IPSet = require_ip_set();
      var Netmask = require_netmask().Netmask;
      var once = require_once();
      var split = require_split();
-     var zlib = __require("zlib");
+     var zlib = require("zlib");
      var ipSetRegex = /^\s*(?:[^#].*?\s*:\s*)?([a-f0-9.:]+)(?:\s*-\s*([a-f0-9.:]+))?\s*$/;
      var cidrRegex = /^\s*(?:[^#].*?\s*:\s*)?([0-9.:]+)\/([0-9]{1,2})\s*$/;
      function loadIPSet(input, opts, cb) {
@@ -4785,14 +4783,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          });
        }
      }
-     module.exports = loadIPSet;
+     module2.exports = loadIPSet;
    }
  });
  
  // node_modules/blob-to-buffer/index.js
  var require_blob_to_buffer = __commonJS({
-   "node_modules/blob-to-buffer/index.js"(exports, module) {
-     module.exports = function blobToBuffer(blob, cb) {
+   "node_modules/blob-to-buffer/index.js"(exports, module2) {
+     module2.exports = function blobToBuffer(blob, cb) {
        if (typeof Blob === "undefined" || !(blob instanceof Blob)) {
          throw new Error("first argument must be a Blob");
        }
@@ -4987,10 +4985,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bep53-range/index.js
  var require_bep53_range = __commonJS({
-   "node_modules/bep53-range/index.js"(exports, module) {
-     module.exports = parseRange;
-     module.exports.parse = parseRange;
-     module.exports.compose = composeRange;
+   "node_modules/bep53-range/index.js"(exports, module2) {
+     module2.exports = parseRange;
+     module2.exports.parse = parseRange;
+     module2.exports.compose = composeRange;
      function composeRange(range) {
        return range.reduce((acc, cur, idx, arr) => {
          if (idx === 0 || cur !== arr[idx - 1] + 1)
@@ -5013,10 +5011,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/magnet-uri/index.js
  var require_magnet_uri = __commonJS({
-   "node_modules/magnet-uri/index.js"(exports, module) {
-     module.exports = magnetURIDecode;
-     module.exports.decode = magnetURIDecode;
-     module.exports.encode = magnetURIEncode;
+   "node_modules/magnet-uri/index.js"(exports, module2) {
+     module2.exports = magnetURIDecode;
+     module2.exports.decode = magnetURIDecode;
+     module2.exports.encode = magnetURIEncode;
      var base32 = require_thirty_two2();
      var bep53Range = require_bep53_range();
      function magnetURIDecode(uri) {
@@ -5170,19 +5168,19 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/parse-torrent/index.js
  var require_parse_torrent = __commonJS({
-   "node_modules/parse-torrent/index.js"(exports, module) {
+   "node_modules/parse-torrent/index.js"(exports, module2) {
      var bencode = require_lib();
      var blobToBuffer = require_blob_to_buffer();
-     var fs2 = __require("fs");
+     var fs2 = require("fs");
      var get = require_simple_get();
      var magnet = require_magnet_uri();
-     var path2 = __require("path");
+     var path2 = require("path");
      var sha1 = require_simple_sha1();
      var queueMicrotask3 = require_queue_microtask();
-     module.exports = parseTorrent;
-     module.exports.remote = parseTorrentRemote;
-     module.exports.toMagnetURI = magnet.encode;
-     module.exports.toTorrentFile = encodeTorrentFile;
+     module2.exports = parseTorrent;
+     module2.exports.remote = parseTorrentRemote;
+     module2.exports.toMagnetURI = magnet.encode;
+     module2.exports.toTorrentFile = encodeTorrentFile;
      function parseTorrent(torrentId) {
        if (typeof torrentId === "string" && /^(stream-)?magnet:/.test(torrentId)) {
          const torrentObj = magnet(torrentId);
@@ -5378,8 +5376,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/get-browser-rtc/index.js
  var require_get_browser_rtc = __commonJS({
-   "node_modules/get-browser-rtc/index.js"(exports, module) {
-     module.exports = function getBrowserRTC() {
+   "node_modules/get-browser-rtc/index.js"(exports, module2) {
+     module2.exports = function getBrowserRTC() {
        if (typeof globalThis === "undefined")
          return null;
        var wrtc = {
@@ -5396,14 +5394,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/internal/streams/stream.js
  var require_stream = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/stream.js"(exports, module) {
-     module.exports = __require("stream");
+   "node_modules/readable-stream/lib/internal/streams/stream.js"(exports, module2) {
+     module2.exports = require("stream");
    }
  });
  
  // node_modules/readable-stream/lib/internal/streams/buffer_list.js
  var require_buffer_list = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/buffer_list.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/buffer_list.js"(exports, module2) {
      "use strict";
      function ownKeys(object, enumerableOnly) {
        var keys = Object.keys(object);
@@ -5464,15 +5462,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          _defineProperties(Constructor, staticProps);
        return Constructor;
      }
-     var _require = __require("buffer");
+     var _require = require("buffer");
      var Buffer2 = _require.Buffer;
-     var _require2 = __require("util");
+     var _require2 = require("util");
      var inspect = _require2.inspect;
      var custom = inspect && inspect.custom || "inspect";
      function copyBuffer(src, target, offset) {
        Buffer2.prototype.copy.call(src, target, offset);
      }
-     module.exports = /* @__PURE__ */ function() {
+     module2.exports = /* @__PURE__ */ function() {
        function BufferList() {
          _classCallCheck(this, BufferList);
          this.head = null;
@@ -5650,7 +5648,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/internal/streams/destroy.js
  var require_destroy = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/destroy.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/destroy.js"(exports, module2) {
      "use strict";
      function destroy(err, cb) {
        var _this = this;
@@ -5733,7 +5731,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        else
          stream.emit("error", err);
      }
-     module.exports = {
+     module2.exports = {
        destroy,
        undestroy,
        errorOrDestroy
@@ -5743,7 +5741,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/errors.js
  var require_errors = __commonJS({
-   "node_modules/readable-stream/errors.js"(exports, module) {
+   "node_modules/readable-stream/errors.js"(exports, module2) {
      "use strict";
      var codes = {};
      function createErrorType(code, message, Base) {
@@ -5837,13 +5835,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        return "Unknown encoding: " + arg;
      }, TypeError);
      createErrorType("ERR_STREAM_UNSHIFT_AFTER_END_EVENT", "stream.unshift() after end event");
-     module.exports.codes = codes;
+     module2.exports.codes = codes;
    }
  });
  
  // node_modules/readable-stream/lib/internal/streams/state.js
  var require_state = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/state.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/state.js"(exports, module2) {
      "use strict";
      var ERR_INVALID_OPT_VALUE = require_errors().codes.ERR_INVALID_OPT_VALUE;
      function highWaterMarkFrom(options, isDuplex, duplexKey) {
@@ -5860,7 +5858,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return state.objectMode ? 16 : 16 * 1024;
      }
-     module.exports = {
+     module2.exports = {
        getHighWaterMark
      };
    }
@@ -5868,16 +5866,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/util-deprecate/node.js
  var require_node2 = __commonJS({
-   "node_modules/util-deprecate/node.js"(exports, module) {
-     module.exports = __require("util").deprecate;
+   "node_modules/util-deprecate/node.js"(exports, module2) {
+     module2.exports = require("util").deprecate;
    }
  });
  
  // node_modules/readable-stream/lib/_stream_writable.js
  var require_stream_writable = __commonJS({
-   "node_modules/readable-stream/lib/_stream_writable.js"(exports, module) {
+   "node_modules/readable-stream/lib/_stream_writable.js"(exports, module2) {
      "use strict";
-     module.exports = Writable;
+     module2.exports = Writable;
      function CorkedRequest(state) {
        var _this = this;
        this.next = null;
@@ -5892,7 +5890,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        deprecate: require_node2()
      };
      var Stream = require_stream();
-     var Buffer2 = __require("buffer").Buffer;
+     var Buffer2 = require("buffer").Buffer;
      var OurUint8Array = global.Uint8Array || function() {
      };
      function _uint8ArrayToBuffer(chunk) {
@@ -6363,7 +6361,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/_stream_duplex.js
  var require_stream_duplex = __commonJS({
-   "node_modules/readable-stream/lib/_stream_duplex.js"(exports, module) {
+   "node_modules/readable-stream/lib/_stream_duplex.js"(exports, module2) {
      "use strict";
      var objectKeys = Object.keys || function(obj) {
        var keys2 = [];
@@ -6372,7 +6370,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return keys2;
      };
-     module.exports = Duplex;
+     module2.exports = Duplex;
      var Readable = require_stream_readable();
      var Writable = require_stream_writable();
      require_inherits()(Duplex, Readable);
@@ -6451,8 +6449,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/safe-buffer/index.js
  var require_safe_buffer = __commonJS({
-   "node_modules/safe-buffer/index.js"(exports, module) {
-     var buffer = __require("buffer");
+   "node_modules/safe-buffer/index.js"(exports, module2) {
+     var buffer = require("buffer");
      var Buffer2 = buffer.Buffer;
      function copyProps(src, dst) {
        for (var key in src) {
@@ -6460,7 +6458,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
      }
      if (Buffer2.from && Buffer2.alloc && Buffer2.allocUnsafe && Buffer2.allocUnsafeSlow) {
-       module.exports = buffer;
+       module2.exports = buffer;
      } else {
        copyProps(buffer, exports);
        exports.Buffer = SafeBuffer;
@@ -6769,7 +6767,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/internal/streams/end-of-stream.js
  var require_end_of_stream = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/end-of-stream.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/end-of-stream.js"(exports, module2) {
      "use strict";
      var ERR_STREAM_PREMATURE_CLOSE = require_errors().codes.ERR_STREAM_PREMATURE_CLOSE;
      function once(callback) {
@@ -6864,13 +6862,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          stream.removeListener("close", onclose);
        };
      }
-     module.exports = eos;
+     module2.exports = eos;
    }
  });
  
  // node_modules/readable-stream/lib/internal/streams/async_iterator.js
  var require_async_iterator = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/async_iterator.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/async_iterator.js"(exports, module2) {
      "use strict";
      var _Object$setPrototypeO;
      function _defineProperty(obj, key, value) {
@@ -7032,13 +7030,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        stream.on("readable", onReadable.bind(null, iterator));
        return iterator;
      };
-     module.exports = createReadableStreamAsyncIterator;
+     module2.exports = createReadableStreamAsyncIterator;
    }
  });
  
  // node_modules/readable-stream/lib/internal/streams/from.js
  var require_from = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/from.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/from.js"(exports, module2) {
      "use strict";
      function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
        try {
@@ -7149,23 +7147,23 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return readable;
      }
-     module.exports = from;
+     module2.exports = from;
    }
  });
  
  // node_modules/readable-stream/lib/_stream_readable.js
  var require_stream_readable = __commonJS({
-   "node_modules/readable-stream/lib/_stream_readable.js"(exports, module) {
+   "node_modules/readable-stream/lib/_stream_readable.js"(exports, module2) {
      "use strict";
-     module.exports = Readable;
+     module2.exports = Readable;
      var Duplex;
      Readable.ReadableState = ReadableState;
-     var EE = __require("events").EventEmitter;
+     var EE = require("events").EventEmitter;
      var EElistenerCount = function EElistenerCount2(emitter, type) {
        return emitter.listeners(type).length;
      };
      var Stream = require_stream();
-     var Buffer2 = __require("buffer").Buffer;
+     var Buffer2 = require("buffer").Buffer;
      var OurUint8Array = global.Uint8Array || function() {
      };
      function _uint8ArrayToBuffer(chunk) {
@@ -7174,7 +7172,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function _isUint8Array(obj) {
        return Buffer2.isBuffer(obj) || obj instanceof OurUint8Array;
      }
-     var debugUtil = __require("util");
+     var debugUtil = require("util");
      var debug;
      if (debugUtil && debugUtil.debuglog) {
        debug = debugUtil.debuglog("stream");
@@ -7938,9 +7936,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/_stream_transform.js
  var require_stream_transform = __commonJS({
-   "node_modules/readable-stream/lib/_stream_transform.js"(exports, module) {
+   "node_modules/readable-stream/lib/_stream_transform.js"(exports, module2) {
      "use strict";
-     module.exports = Transform;
+     module2.exports = Transform;
      var _require$codes = require_errors().codes;
      var ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED;
      var ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK;
@@ -8046,9 +8044,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/_stream_passthrough.js
  var require_stream_passthrough = __commonJS({
-   "node_modules/readable-stream/lib/_stream_passthrough.js"(exports, module) {
+   "node_modules/readable-stream/lib/_stream_passthrough.js"(exports, module2) {
      "use strict";
-     module.exports = PassThrough;
+     module2.exports = PassThrough;
      var Transform = require_stream_transform();
      require_inherits()(PassThrough, Transform);
      function PassThrough(options) {
@@ -8064,7 +8062,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/readable-stream/lib/internal/streams/pipeline.js
  var require_pipeline = __commonJS({
-   "node_modules/readable-stream/lib/internal/streams/pipeline.js"(exports, module) {
+   "node_modules/readable-stream/lib/internal/streams/pipeline.js"(exports, module2) {
      "use strict";
      var eos;
      function once(callback) {
@@ -8157,20 +8155,20 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        });
        return streams.reduce(pipe);
      }
-     module.exports = pipeline;
+     module2.exports = pipeline;
    }
  });
  
  // node_modules/readable-stream/readable.js
  var require_readable = __commonJS({
-   "node_modules/readable-stream/readable.js"(exports, module) {
-     var Stream = __require("stream");
+   "node_modules/readable-stream/readable.js"(exports, module2) {
+     var Stream = require("stream");
      if (process.env.READABLE_STREAM === "disable" && Stream) {
-       module.exports = Stream.Readable;
-       Object.assign(module.exports, Stream);
-       module.exports.Stream = Stream;
+       module2.exports = Stream.Readable;
+       Object.assign(module2.exports, Stream);
+       module2.exports.Stream = Stream;
      } else {
-       exports = module.exports = require_stream_readable();
+       exports = module2.exports = require_stream_readable();
        exports.Stream = Stream || exports;
        exports.Readable = exports;
        exports.Writable = require_stream_writable();
@@ -8185,7 +8183,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/err-code/index.js
  var require_err_code = __commonJS({
-   "node_modules/err-code/index.js"(exports, module) {
+   "node_modules/err-code/index.js"(exports, module2) {
      "use strict";
      function assign(obj, props) {
        for (const key in props) {
@@ -8223,20 +8221,20 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return output;
        }
      }
-     module.exports = createError;
+     module2.exports = createError;
    }
  });
  
  // node_modules/simple-peer/index.js
  var require_simple_peer = __commonJS({
-   "node_modules/simple-peer/index.js"(exports, module) {
+   "node_modules/simple-peer/index.js"(exports, module2) {
      var debug = require_src()("simple-peer");
      var getBrowserRTC = require_get_browser_rtc();
      var randombytes2 = require_randombytes();
      var stream = require_readable();
      var queueMicrotask3 = require_queue_microtask();
      var errCode = require_err_code();
-     var { Buffer: Buffer2 } = __require("buffer");
+     var { Buffer: Buffer2 } = require("buffer");
      var MAX_BUFFERED_AMOUNT = 64 * 1024;
      var ICECOMPLETE_TIMEOUT = 5 * 1e3;
      var CHANNEL_CLOSING_TIMEOUT = 5 * 1e3;
@@ -9094,20 +9092,20 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        sdpSemantics: "unified-plan"
      };
      Peer.channelConfig = {};
-     module.exports = Peer;
+     module2.exports = Peer;
    }
  });
  
  // node_modules/throughput/index.js
  var require_throughput = __commonJS({
-   "node_modules/throughput/index.js"(exports, module) {
+   "node_modules/throughput/index.js"(exports, module2) {
      var maxTick = 65535;
      var resolution = 10;
      var timeDiff = 1e3 / resolution;
      function getTick(start) {
        return (+Date.now() - start) / timeDiff & 65535;
      }
-     module.exports = function(seconds) {
+     module2.exports = function(seconds) {
        const start = +Date.now();
        const size = resolution * (seconds || 5);
        const buffer = [0];
@@ -9137,22 +9135,22 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/queue-tick/queue-microtask.js
  var require_queue_microtask2 = __commonJS({
-   "node_modules/queue-tick/queue-microtask.js"(exports, module) {
-     module.exports = typeof queueMicrotask === "function" ? queueMicrotask : (fn) => Promise.resolve().then(fn);
+   "node_modules/queue-tick/queue-microtask.js"(exports, module2) {
+     module2.exports = typeof queueMicrotask === "function" ? queueMicrotask : (fn) => Promise.resolve().then(fn);
    }
  });
  
  // node_modules/queue-tick/process-next-tick.js
  var require_process_next_tick = __commonJS({
-   "node_modules/queue-tick/process-next-tick.js"(exports, module) {
-     module.exports = typeof process !== "undefined" && typeof process.nextTick === "function" ? process.nextTick.bind(process) : require_queue_microtask2();
+   "node_modules/queue-tick/process-next-tick.js"(exports, module2) {
+     module2.exports = typeof process !== "undefined" && typeof process.nextTick === "function" ? process.nextTick.bind(process) : require_queue_microtask2();
    }
  });
  
  // node_modules/fast-fifo/fixed-size.js
  var require_fixed_size = __commonJS({
-   "node_modules/fast-fifo/fixed-size.js"(exports, module) {
-     module.exports = class FixedFIFO {
+   "node_modules/fast-fifo/fixed-size.js"(exports, module2) {
+     module2.exports = class FixedFIFO {
        constructor(hwm) {
          if (!(hwm > 0) || (hwm - 1 & hwm) !== 0)
            throw new Error("Max size for a FixedFIFO should be a power of two");
@@ -9189,9 +9187,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/fast-fifo/index.js
  var require_fast_fifo = __commonJS({
-   "node_modules/fast-fifo/index.js"(exports, module) {
+   "node_modules/fast-fifo/index.js"(exports, module2) {
      var FixedFIFO = require_fixed_size();
-     module.exports = class FastFIFO {
+     module2.exports = class FastFIFO {
        constructor(hwm) {
          this.hwm = hwm || 16;
          this.head = new FixedFIFO(this.hwm);
@@ -9226,8 +9224,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/streamx/index.js
  var require_streamx = __commonJS({
-   "node_modules/streamx/index.js"(exports, module) {
-     var { EventEmitter } = __require("events");
+   "node_modules/streamx/index.js"(exports, module2) {
+     var { EventEmitter } = require("events");
      var STREAM_DESTROYED = new Error("Stream was destroyed");
      var PREMATURE_CLOSE = new Error("Premature close");
      var queueTick = require_process_next_tick();
@@ -10097,7 +10095,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function abort() {
        this.destroy(new Error("Stream aborted."));
      }
-     module.exports = {
+     module2.exports = {
        pipeline,
        pipelinePromise,
        isStream,
@@ -10114,11 +10112,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/speed-limiter/lib/utils.js
  var require_utils = __commonJS({
-   "node_modules/speed-limiter/lib/utils.js"(exports, module) {
+   "node_modules/speed-limiter/lib/utils.js"(exports, module2) {
      function wait(time) {
        return new Promise((resolve) => setTimeout(resolve, time));
      }
-     module.exports = {
+     module2.exports = {
        wait
      };
    }
@@ -10126,7 +10124,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/limiter/lib/tokenBucket.js
  var require_tokenBucket = __commonJS({
-   "node_modules/limiter/lib/tokenBucket.js"(exports, module) {
+   "node_modules/limiter/lib/tokenBucket.js"(exports, module2) {
      var TokenBucket = function(bucketSize, tokensPerInterval, interval, parentBucket) {
        this.bucketSize = bucketSize;
        this.tokensPerInterval = tokensPerInterval;
@@ -10226,13 +10224,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.content = Math.min(this.content + dripAmount, this.bucketSize);
        }
      };
-     module.exports = TokenBucket;
+     module2.exports = TokenBucket;
    }
  });
  
  // node_modules/limiter/lib/clock.js
  var require_clock = __commonJS({
-   "node_modules/limiter/lib/clock.js"(exports, module) {
+   "node_modules/limiter/lib/clock.js"(exports, module2) {
      var getMilliseconds = function() {
        if (typeof process !== "undefined" && process.hrtime) {
          var hrtime = process.hrtime();
@@ -10242,13 +10240,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return new Date().getTime();
      };
-     module.exports = getMilliseconds;
+     module2.exports = getMilliseconds;
    }
  });
  
  // node_modules/limiter/lib/rateLimiter.js
  var require_rateLimiter = __commonJS({
-   "node_modules/limiter/lib/rateLimiter.js"(exports, module) {
+   "node_modules/limiter/lib/rateLimiter.js"(exports, module2) {
      var TokenBucket = require_tokenBucket();
      var getMilliseconds = require_clock();
      var RateLimiter = function(tokensPerInterval, interval, fireImmediately) {
@@ -10325,7 +10323,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return this.tokenBucket.content;
        }
      };
-     module.exports = RateLimiter;
+     module2.exports = RateLimiter;
    }
  });
  
@@ -10339,7 +10337,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/speed-limiter/lib/throttle-group.js
  var require_throttle_group = __commonJS({
-   "node_modules/speed-limiter/lib/throttle-group.js"(exports, module) {
+   "node_modules/speed-limiter/lib/throttle-group.js"(exports, module2) {
      var { TokenBucket } = require_limiter();
      var Throttle = require_throttle();
      var ThrottleGroup = class {
@@ -10418,14 +10416,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
            this.throttles.splice(index, 1);
        }
      };
-     module.exports = ThrottleGroup;
+     module2.exports = ThrottleGroup;
    }
  });
  
  // node_modules/speed-limiter/lib/throttle.js
  var require_throttle = __commonJS({
-   "node_modules/speed-limiter/lib/throttle.js"(exports, module) {
-     var { EventEmitter } = __require("events");
+   "node_modules/speed-limiter/lib/throttle.js"(exports, module2) {
+     var { EventEmitter } = require("events");
      var { Transform } = require_streamx();
      var { wait } = require_utils();
      var Throttle = class extends Transform {
@@ -10524,17 +10522,17 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          super.destroy(...args);
        }
      };
-     module.exports = Throttle;
+     module2.exports = Throttle;
      var ThrottleGroup = require_throttle_group();
    }
  });
  
  // node_modules/speed-limiter/index.js
  var require_speed_limiter = __commonJS({
-   "node_modules/speed-limiter/index.js"(exports, module) {
+   "node_modules/speed-limiter/index.js"(exports, module2) {
      var Throttle = require_throttle();
      var ThrottleGroup = require_throttle_group();
-     module.exports = {
+     module2.exports = {
        Throttle,
        ThrottleGroup
      };
@@ -10543,8 +10541,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/unordered-array-remove/index.js
  var require_unordered_array_remove = __commonJS({
-   "node_modules/unordered-array-remove/index.js"(exports, module) {
-     module.exports = remove;
+   "node_modules/unordered-array-remove/index.js"(exports, module2) {
+     module2.exports = remove;
      function remove(arr, i) {
        if (i >= arr.length || i < 0)
          return;
@@ -10622,7 +10620,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/speedometer/index.js
  var require_speedometer = __commonJS({
-   "node_modules/speedometer/index.js"(exports, module) {
+   "node_modules/speedometer/index.js"(exports, module2) {
      var tick = 1;
      var maxTick = 65535;
      var resolution = 4;
@@ -10630,7 +10628,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var inc = function() {
        tick = tick + 1 & maxTick;
      };
-     module.exports = function(seconds) {
+     module2.exports = function(seconds) {
        if (!timer) {
          timer = setInterval(inc, 1e3 / resolution | 0);
          if (timer.unref)
@@ -10663,7 +10661,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/rc4/rc4.js
  var require_rc4 = __commonJS({
-   "node_modules/rc4/rc4.js"(exports, module) {
+   "node_modules/rc4/rc4.js"(exports, module2) {
      "use strict";
      function isInteger(n) {
        return parseInt(n, 10) === n;
@@ -10816,17 +10814,17 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        });
      };
      RC4.RC4small = RC4small;
-     module.exports = RC4;
+     module2.exports = RC4;
    }
  });
  
  // node_modules/bittorrent-protocol/index.js
  var require_bittorrent_protocol = __commonJS({
-   "node_modules/bittorrent-protocol/index.js"(exports, module) {
+   "node_modules/bittorrent-protocol/index.js"(exports, module2) {
      var arrayRemove = require_unordered_array_remove();
      var bencode = require_lib();
      var BitField = require_lib2().default;
-     var crypto = __require("crypto");
+     var crypto = require("crypto");
      var debug = require_src()("bittorrent-protocol");
      var randombytes2 = require_randombytes();
      var sha1 = require_simple_sha1();
@@ -11847,15 +11845,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return Buffer.from(str, "utf8").toString("hex");
        }
      };
-     module.exports = Wire;
+     module2.exports = Wire;
    }
  });
  
  // node_modules/webtorrent/lib/peer.js
  var require_peer = __commonJS({
    "node_modules/webtorrent/lib/peer.js"(exports) {
-     var EventEmitter = __require("events");
-     var { Transform } = __require("stream");
+     var EventEmitter = require("events");
+     var { Transform } = require("stream");
      var arrayRemove = require_unordered_array_remove();
      var debugFactory = require_src();
      var Wire = require_bittorrent_protocol();
@@ -12154,11 +12152,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/node-gyp-build/index.js
  var require_node_gyp_build = __commonJS({
-   "node_modules/node-gyp-build/index.js"(exports, module) {
-     var fs2 = __require("fs");
-     var path2 = __require("path");
-     var os2 = __require("os");
-     var runtimeRequire = typeof __webpack_require__ === "function" ? __non_webpack_require__ : __require;
+   "node_modules/node-gyp-build/index.js"(exports, module2) {
+     var fs2 = require("fs");
+     var path2 = require("path");
+     var os2 = require("os");
+     var runtimeRequire = typeof __webpack_require__ === "function" ? __non_webpack_require__ : require;
      var vars = process.config && process.config.variables || {};
      var prebuildsOnly = !!process.env.PREBUILDS_ONLY;
      var abi = process.versions.modules;
@@ -12168,7 +12166,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var libc = process.env.LIBC || (isAlpine(platform) ? "musl" : "glibc");
      var armv = process.env.ARM_VERSION || (arch === "arm64" ? "8" : vars.arm_version) || "";
      var uv = (process.versions.uv || "").split(".")[0];
-     module.exports = load;
+     module2.exports = load;
      function load(dir) {
        return runtimeRequire(load.path(dir));
      }
@@ -12344,9 +12342,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/utp-native/lib/binding.js
  var require_binding = __commonJS({
-   "node_modules/utp-native/lib/binding.js"(exports, module) {
-     var path2 = __require("path");
-     module.exports = require_node_gyp_build()(path2.join(__dirname, ".."));
+   "node_modules/utp-native/lib/binding.js"(exports, module2) {
+     var path2 = require("path");
+     module2.exports = require_node_gyp_build()(path2.join(__dirname, ".."));
    }
  });
  
@@ -12391,8 +12389,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/timeout-refresh/refresh.js
  var require_refresh = __commonJS({
-   "node_modules/timeout-refresh/refresh.js"(exports, module) {
-     module.exports = Timer;
+   "node_modules/timeout-refresh/refresh.js"(exports, module2) {
+     module2.exports = Timer;
      function Timer(ms, fn, ctx) {
        if (!(this instanceof Timer))
          return new Timer(ms, fn, ctx);
@@ -12421,8 +12419,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/timeout-refresh/browser.js
  var require_browser2 = __commonJS({
-   "node_modules/timeout-refresh/browser.js"(exports, module) {
-     module.exports = Timeout;
+   "node_modules/timeout-refresh/browser.js"(exports, module2) {
+     module2.exports = Timeout;
      function Timeout(ms, fn, ctx) {
        if (!(this instanceof Timeout))
          return new Timeout(ms, fn, ctx);
@@ -12451,12 +12449,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/timeout-refresh/timers.js
  var require_timers = __commonJS({
-   "node_modules/timeout-refresh/timers.js"(exports, module) {
-     var timers = __require("timers");
+   "node_modules/timeout-refresh/timers.js"(exports, module2) {
+     var timers = require("timers");
      var enroll = timers.enroll || noop2;
      var active = timers._unrefActive || timers.active || noop2;
      var unenroll = timers.unenroll || noop2;
-     module.exports = Timeout;
+     module2.exports = Timeout;
      function Timeout(ms, fn, ctx) {
        if (!(this instanceof Timeout))
          return new Timeout(ms, fn, ctx);
@@ -12487,22 +12485,22 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/timeout-refresh/index.js
  var require_timeout_refresh = __commonJS({
-   "node_modules/timeout-refresh/index.js"(exports, module) {
+   "node_modules/timeout-refresh/index.js"(exports, module2) {
      var to = setTimeout(function() {
      }, 1e3);
      clearTimeout(to);
-     module.exports = to.refresh ? require_refresh() : process.versions.electron ? require_browser2() : require_timers();
+     module2.exports = to.refresh ? require_refresh() : process.versions.electron ? require_browser2() : require_timers();
    }
  });
  
  // node_modules/utp-native/lib/connection.js
  var require_connection = __commonJS({
-   "node_modules/utp-native/lib/connection.js"(exports, module) {
+   "node_modules/utp-native/lib/connection.js"(exports, module2) {
      var binding = require_binding();
      var stream = require_readable();
-     var util = __require("util");
+     var util = require("util");
      var unordered = require_unordered_set();
-     var dns = __require("dns");
+     var dns = require("dns");
      var timeout = require_timeout_refresh();
      var EMPTY = Buffer.alloc(0);
      var UTP_ERRORS = [
@@ -12511,7 +12509,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        "UTP_ETIMEDOUT",
        "UTP_UNKNOWN"
      ];
-     module.exports = Connection;
+     module2.exports = Connection;
      function Connection(utp, port, address, handle, halfOpen) {
        stream.Duplex.call(this);
        this.remoteAddress = address;
@@ -12724,16 +12722,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/utp-native/index.js
  var require_utp_native = __commonJS({
-   "node_modules/utp-native/index.js"(exports, module) {
+   "node_modules/utp-native/index.js"(exports, module2) {
      var binding = require_binding();
      var Connection = require_connection();
-     var util = __require("util");
-     var events = __require("events");
-     var dns = __require("dns");
+     var util = require("util");
+     var events = require("events");
+     var dns = require("dns");
      var set = require_unordered_set();
      var EMPTY = Buffer.alloc(0);
      var IPv4Pattern = /^((?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])[.]){3}(?:[0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])$/;
-     module.exports = UTP;
+     module2.exports = UTP;
      function UTP(opts) {
        if (!(this instanceof UTP))
          return new UTP(opts);
@@ -13016,12 +13014,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/webtorrent/lib/utp.js
  var require_utp = __commonJS({
-   "node_modules/webtorrent/lib/utp.js"(exports, module) {
-     module.exports = (() => {
+   "node_modules/webtorrent/lib/utp.js"(exports, module2) {
+     module2.exports = (() => {
        try {
          return require_utp_native();
        } catch (err) {
-         console.warn("WebTorrent: uTP not supported");
+         console.warn("WebTorrent: uTP not supported", err);
          return {};
        }
      })();
@@ -13030,8 +13028,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/webtorrent/lib/conn-pool.js
  var require_conn_pool = __commonJS({
-   "node_modules/webtorrent/lib/conn-pool.js"(exports, module) {
-     var net = __require("net");
+   "node_modules/webtorrent/lib/conn-pool.js"(exports, module2) {
+     var net = require("net");
      var debugFactory = require_src();
      var queueMicrotask3 = require_queue_microtask();
      var Peer = require_peer();
@@ -13157,16 +13155,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      ConnPool.UTP_SUPPORT = Object.keys(utp).length > 0;
      function noop2() {
      }
-     module.exports = ConnPool;
+     module2.exports = ConnPool;
    }
  });
  
  // node_modules/addr-to-ip-port/index.js
  var require_addr_to_ip_port = __commonJS({
-   "node_modules/addr-to-ip-port/index.js"(exports, module) {
+   "node_modules/addr-to-ip-port/index.js"(exports, module2) {
      var ADDR_RE = /^\[?([^\]]+)]?:(\d+)$/;
      var cache = /* @__PURE__ */ new Map();
-     module.exports = function addrToIPPort(addr) {
+     module2.exports = function addrToIPPort(addr) {
        if (cache.size === 1e5)
          cache.clear();
        if (!cache.has(addr)) {
@@ -13182,7 +13180,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/cache-chunk-store/index.js
  var require_cache_chunk_store = __commonJS({
-   "node_modules/cache-chunk-store/index.js"(exports, module) {
+   "node_modules/cache-chunk-store/index.js"(exports, module2) {
      var LRU = require_lru();
      var queueMicrotask3 = require_queue_microtask();
      var CacheStore = class {
@@ -13270,13 +13268,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.store.destroy(cb);
        }
      };
-     module.exports = CacheStore;
+     module2.exports = CacheStore;
    }
  });
  
  // node_modules/block-stream2/index.js
  var require_block_stream2 = __commonJS({
-   "node_modules/block-stream2/index.js"(exports, module) {
+   "node_modules/block-stream2/index.js"(exports, module2) {
      var { Transform } = require_readable();
      var Block = class extends Transform {
        constructor(size, opts = {}) {
@@ -13330,13 +13328,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.push(null);
        }
      };
-     module.exports = Block;
+     module2.exports = Block;
    }
  });
  
  // node_modules/chunk-store-stream/write.js
  var require_write = __commonJS({
-   "node_modules/chunk-store-stream/write.js"(exports, module) {
+   "node_modules/chunk-store-stream/write.js"(exports, module2) {
      var BlockStream = require_block_stream2();
      var stream = require_readable();
      var ChunkStoreWriteStream = class extends stream.Writable {
@@ -13399,15 +13397,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.emit("close");
        }
      };
-     module.exports = ChunkStoreWriteStream;
+     module2.exports = ChunkStoreWriteStream;
    }
  });
  
  // node_modules/cpus/index.js
  var require_cpus = __commonJS({
-   "node_modules/cpus/index.js"(exports, module) {
-     var os2 = __require("os");
-     module.exports = function cpus() {
+   "node_modules/cpus/index.js"(exports, module2) {
+     var os2 = require("os");
+     module2.exports = function cpus() {
        return os2.cpus();
      };
    }
@@ -13416,7 +13414,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  // node_modules/bittorrent-tracker/lib/common-node.js
  var require_common_node = __commonJS({
    "node_modules/bittorrent-tracker/lib/common-node.js"(exports) {
-     var querystring = __require("querystring");
+     var querystring = require("querystring");
      exports.IPV4_RE = /^[\d.]+$/;
      exports.IPV6_RE = /^[\da-fA-F:]+$/;
      exports.REMOVE_IPV4_MAPPED_IPV6_RE = /^::ffff:/;
@@ -13489,7 +13487,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/clone/clone.js
  var require_clone = __commonJS({
-   "node_modules/clone/clone.js"(exports, module) {
+   "node_modules/clone/clone.js"(exports, module2) {
      var clone = function() {
        "use strict";
        function _instanceof(obj, type) {
@@ -13681,15 +13679,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        clone2.__getRegExpFlags = __getRegExpFlags;
        return clone2;
      }();
-     if (typeof module === "object" && module.exports) {
-       module.exports = clone;
+     if (typeof module2 === "object" && module2.exports) {
+       module2.exports = clone;
      }
    }
  });
  
  // node_modules/ipaddr.js/lib/ipaddr.js
  var require_ipaddr = __commonJS({
-   "node_modules/ipaddr.js/lib/ipaddr.js"(exports, module) {
+   "node_modules/ipaddr.js/lib/ipaddr.js"(exports, module2) {
      (function(root) {
        "use strict";
        const ipv4Part = "(0?\\d+|0x[a-f0-9]+)";
@@ -14394,8 +14392,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
          return defaultName;
        };
-       if (typeof module !== "undefined" && module.exports) {
-         module.exports = ipaddr;
+       if (typeof module2 !== "undefined" && module2.exports) {
+         module2.exports = ipaddr;
        } else {
          root.ipaddr = ipaddr;
        }
@@ -14405,7 +14403,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/compact2string/index.js
  var require_compact2string = __commonJS({
-   "node_modules/compact2string/index.js"(exports, module) {
+   "node_modules/compact2string/index.js"(exports, module2) {
      var ipaddr = require_ipaddr();
      var compact2string = function(buf) {
        switch (buf.length) {
@@ -14441,7 +14439,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return output;
      };
-     module.exports = compact2string;
+     module2.exports = compact2string;
    }
  });
  
@@ -14449,8 +14447,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  var require_ip2 = __commonJS({
    "node_modules/socks/node_modules/ip/lib/ip.js"(exports) {
      var ip = exports;
-     var { Buffer: Buffer2 } = __require("buffer");
-     var os2 = __require("os");
+     var { Buffer: Buffer2 } = require("buffer");
+     var os2 = require("os");
      ip.toBuffer = function(ip2, buff, offset) {
        offset = ~~offset;
        let result;
@@ -14753,7 +14751,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
    "node_modules/smart-buffer/build/utils.js"(exports) {
      "use strict";
      Object.defineProperty(exports, "__esModule", { value: true });
-     var buffer_1 = __require("buffer");
+     var buffer_1 = require("buffer");
      var ERRORS = {
        INVALID_ENCODING: "Invalid encoding provided. Please specify a valid encoding the internal Node.js Buffer supports.",
        INVALID_SMARTBUFFER_SIZE: "Invalid size provided. Size must be a valid integer greater than zero.",
@@ -15467,7 +15465,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      exports.validateSocksClientChainOptions = exports.validateSocksClientOptions = void 0;
      var util_1 = require_util2();
      var constants_1 = require_constants();
-     var stream = __require("stream");
+     var stream = require("stream");
      function validateSocksClientOptions(options, acceptedCommands = ["connect", "bind", "associate"]) {
        if (!constants_1.SocksCommand[options.command]) {
          throw new util_1.SocksClientError(constants_1.ERRORS.InvalidSocksCommand, options);
@@ -15620,8 +15618,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      };
      Object.defineProperty(exports, "__esModule", { value: true });
      exports.SocksClientError = exports.SocksClient = void 0;
-     var events_1 = __require("events");
-     var net = __require("net");
+     var events_1 = require("events");
+     var net = require("net");
      var ip = require_ip2();
      var smart_buffer_1 = require_smartbuffer();
      var constants_1 = require_constants();
@@ -16198,8 +16196,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bittorrent-tracker/lib/client/tracker.js
  var require_tracker = __commonJS({
-   "node_modules/bittorrent-tracker/lib/client/tracker.js"(exports, module) {
-     var EventEmitter = __require("events");
+   "node_modules/bittorrent-tracker/lib/client/tracker.js"(exports, module2) {
+     var EventEmitter = require("events");
      var Tracker = class extends EventEmitter {
        constructor(client, announceUrl) {
          super();
@@ -16221,13 +16219,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        }
      };
-     module.exports = Tracker;
+     module2.exports = Tracker;
    }
  });
  
  // node_modules/bittorrent-tracker/lib/client/http-tracker.js
  var require_http_tracker = __commonJS({
-   "node_modules/bittorrent-tracker/lib/client/http-tracker.js"(exports, module) {
+   "node_modules/bittorrent-tracker/lib/client/http-tracker.js"(exports, module2) {
      var arrayRemove = require_unordered_array_remove();
      var bencode = require_lib();
      var clone = require_clone();
@@ -16433,14 +16431,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
      };
      HTTPTracker.prototype.DEFAULT_ANNOUNCE_INTERVAL = 30 * 60 * 1e3;
-     module.exports = HTTPTracker;
+     module2.exports = HTTPTracker;
    }
  });
  
  // node_modules/bn.js/lib/bn.js
  var require_bn = __commonJS({
-   "node_modules/bn.js/lib/bn.js"(exports, module) {
-     (function(module2, exports2) {
+   "node_modules/bn.js/lib/bn.js"(exports, module2) {
+     (function(module3, exports2) {
        "use strict";
        function assert(val, msg) {
          if (!val)
@@ -16470,8 +16468,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
            this._init(number || 0, base || 10, endian || "be");
          }
        }
-       if (typeof module2 === "object") {
-         module2.exports = BN;
+       if (typeof module3 === "object") {
+         module3.exports = BN;
        } else {
          exports2.BN = BN;
        }
@@ -16482,7 +16480,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          if (typeof window !== "undefined" && typeof window.Buffer !== "undefined") {
            Buffer2 = window.Buffer;
          } else {
-           Buffer2 = __require("buffer").Buffer;
+           Buffer2 = require("buffer").Buffer;
          }
        } catch (e) {
        }
@@ -19369,19 +19367,19 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          var res = this.imod(a._invmp(this.m).mul(this.r2));
          return res._forceRed(this);
        };
-     })(typeof module === "undefined" || module, exports);
+     })(typeof module2 === "undefined" || module2, exports);
    }
  });
  
  // node_modules/bittorrent-tracker/lib/client/udp-tracker.js
  var require_udp_tracker = __commonJS({
-   "node_modules/bittorrent-tracker/lib/client/udp-tracker.js"(exports, module) {
+   "node_modules/bittorrent-tracker/lib/client/udp-tracker.js"(exports, module2) {
      var arrayRemove = require_unordered_array_remove();
      var BN = require_bn();
      var clone = require_clone();
      var compact2string = require_compact2string();
      var debug = require_src()("bittorrent-tracker:udp-tracker");
-     var dgram = __require("dgram");
+     var dgram = require("dgram");
      var randombytes2 = require_randombytes();
      var Socks = require_build();
      var common = require_common2();
@@ -19660,15 +19658,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      }
      function noop2() {
      }
-     module.exports = UDPTracker;
+     module2.exports = UDPTracker;
    }
  });
  
  // node_modules/ws/lib/constants.js
  var require_constants2 = __commonJS({
-   "node_modules/ws/lib/constants.js"(exports, module) {
+   "node_modules/ws/lib/constants.js"(exports, module2) {
      "use strict";
-     module.exports = {
+     module2.exports = {
        BINARY_TYPES: ["nodebuffer", "arraybuffer", "fragments"],
        GUID: "258EAFA5-E914-47DA-95CA-C5AB0DC85B11",
        kStatusCode: Symbol("status-code"),
@@ -19682,7 +19680,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/bufferutil/fallback.js
  var require_fallback = __commonJS({
-   "node_modules/bufferutil/fallback.js"(exports, module) {
+   "node_modules/bufferutil/fallback.js"(exports, module2) {
      "use strict";
      var mask = (source, mask2, output, offset, length) => {
        for (var i = 0; i < length; i++) {
@@ -19695,25 +19693,25 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          buffer[i] ^= mask2[i & 3];
        }
      };
-     module.exports = { mask, unmask };
+     module2.exports = { mask, unmask };
    }
  });
  
  // node_modules/bufferutil/index.js
  var require_bufferutil = __commonJS({
-   "node_modules/bufferutil/index.js"(exports, module) {
+   "node_modules/bufferutil/index.js"(exports, module2) {
      "use strict";
      try {
-       module.exports = require_node_gyp_build()(__dirname);
+       module2.exports = require_node_gyp_build()(__dirname);
      } catch (e) {
-       module.exports = require_fallback();
+       module2.exports = require_fallback();
      }
    }
  });
  
  // node_modules/ws/lib/buffer-util.js
  var require_buffer_util = __commonJS({
-   "node_modules/ws/lib/buffer-util.js"(exports, module) {
+   "node_modules/ws/lib/buffer-util.js"(exports, module2) {
      "use strict";
      var { EMPTY_BUFFER } = require_constants2();
      function concat(list, totalLength) {
@@ -19767,7 +19765,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      try {
        const bufferUtil = require_bufferutil();
        const bu = bufferUtil.BufferUtil || bufferUtil;
-       module.exports = {
+       module2.exports = {
          concat,
          mask(source, mask, output, offset, length) {
            if (length < 48)
@@ -19785,7 +19783,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        };
      } catch (e) {
-       module.exports = {
+       module2.exports = {
          concat,
          mask: _mask,
          toArrayBuffer,
@@ -19798,7 +19796,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ws/lib/limiter.js
  var require_limiter2 = __commonJS({
-   "node_modules/ws/lib/limiter.js"(exports, module) {
+   "node_modules/ws/lib/limiter.js"(exports, module2) {
      "use strict";
      var kDone = Symbol("kDone");
      var kRun = Symbol("kRun");
@@ -19826,15 +19824,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        }
      };
-     module.exports = Limiter;
+     module2.exports = Limiter;
    }
  });
  
  // node_modules/ws/lib/permessage-deflate.js
  var require_permessage_deflate = __commonJS({
-   "node_modules/ws/lib/permessage-deflate.js"(exports, module) {
+   "node_modules/ws/lib/permessage-deflate.js"(exports, module2) {
      "use strict";
-     var zlib = __require("zlib");
+     var zlib = require("zlib");
      var bufferUtil = require_buffer_util();
      var Limiter = require_limiter2();
      var { kStatusCode, NOOP } = require_constants2();
@@ -20086,7 +20084,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          });
        }
      };
-     module.exports = PerMessageDeflate;
+     module2.exports = PerMessageDeflate;
      function deflateOnData(chunk) {
        this[kBuffers].push(chunk);
        this[kTotalLength] += chunk.length;
@@ -20113,7 +20111,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/utf-8-validate/fallback.js
  var require_fallback2 = __commonJS({
-   "node_modules/utf-8-validate/fallback.js"(exports, module) {
+   "node_modules/utf-8-validate/fallback.js"(exports, module2) {
      "use strict";
      function isValidUTF8(buf) {
        const len = buf.length;
@@ -20142,25 +20140,25 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return true;
      }
-     module.exports = isValidUTF8;
+     module2.exports = isValidUTF8;
    }
  });
  
  // node_modules/utf-8-validate/index.js
  var require_utf_8_validate = __commonJS({
-   "node_modules/utf-8-validate/index.js"(exports, module) {
+   "node_modules/utf-8-validate/index.js"(exports, module2) {
      "use strict";
      try {
-       module.exports = require_node_gyp_build()(__dirname);
+       module2.exports = require_node_gyp_build()(__dirname);
      } catch (e) {
-       module.exports = require_fallback2();
+       module2.exports = require_fallback2();
      }
    }
  });
  
  // node_modules/ws/lib/validation.js
  var require_validation = __commonJS({
-   "node_modules/ws/lib/validation.js"(exports, module) {
+   "node_modules/ws/lib/validation.js"(exports, module2) {
      "use strict";
      function isValidStatusCode(code) {
        return code >= 1e3 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006 || code >= 3e3 && code <= 4999;
@@ -20197,14 +20195,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        if (typeof isValidUTF8 === "object") {
          isValidUTF8 = isValidUTF8.Validation.isValidUTF8;
        }
-       module.exports = {
+       module2.exports = {
          isValidStatusCode,
          isValidUTF8(buf) {
            return buf.length < 150 ? _isValidUTF8(buf) : isValidUTF8(buf);
          }
        };
      } catch (e) {
-       module.exports = {
+       module2.exports = {
          isValidStatusCode,
          isValidUTF8: _isValidUTF8
        };
@@ -20214,9 +20212,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ws/lib/receiver.js
  var require_receiver = __commonJS({
-   "node_modules/ws/lib/receiver.js"(exports, module) {
+   "node_modules/ws/lib/receiver.js"(exports, module2) {
      "use strict";
-     var { Writable } = __require("stream");
+     var { Writable } = require("stream");
      var PerMessageDeflate = require_permessage_deflate();
      var {
        BINARY_TYPES,
@@ -20634,7 +20632,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this._state = GET_INFO;
        }
      };
-     module.exports = Receiver;
+     module2.exports = Receiver;
      function error(ErrorCtor, message, prefix, statusCode, errorCode) {
        const err = new ErrorCtor(
          prefix ? `Invalid WebSocket frame: ${message}` : message
@@ -20649,11 +20647,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ws/lib/sender.js
  var require_sender = __commonJS({
-   "node_modules/ws/lib/sender.js"(exports, module) {
+   "node_modules/ws/lib/sender.js"(exports, module2) {
      "use strict";
-     var net = __require("net");
-     var tls = __require("tls");
-     var { randomFillSync } = __require("crypto");
+     var net = require("net");
+     var tls = require("tls");
+     var { randomFillSync } = require("crypto");
      var PerMessageDeflate = require_permessage_deflate();
      var { EMPTY_BUFFER } = require_constants2();
      var { isValidStatusCode } = require_validation();
@@ -20882,13 +20880,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        }
      };
-     module.exports = Sender;
+     module2.exports = Sender;
    }
  });
  
  // node_modules/ws/lib/event-target.js
  var require_event_target = __commonJS({
-   "node_modules/ws/lib/event-target.js"(exports, module) {
+   "node_modules/ws/lib/event-target.js"(exports, module2) {
      "use strict";
      var Event = class {
        constructor(type, target) {
@@ -20964,13 +20962,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
        }
      };
-     module.exports = EventTarget;
+     module2.exports = EventTarget;
    }
  });
  
  // node_modules/ws/lib/extension.js
  var require_extension = __commonJS({
-   "node_modules/ws/lib/extension.js"(exports, module) {
+   "node_modules/ws/lib/extension.js"(exports, module2) {
      "use strict";
      var tokenChars = [
        0,
@@ -21264,22 +21262,22 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }).join(", ");
        }).join(", ");
      }
-     module.exports = { format, parse };
+     module2.exports = { format, parse };
    }
  });
  
  // node_modules/ws/lib/websocket.js
  var require_websocket = __commonJS({
-   "node_modules/ws/lib/websocket.js"(exports, module) {
+   "node_modules/ws/lib/websocket.js"(exports, module2) {
      "use strict";
-     var EventEmitter = __require("events");
-     var https = __require("https");
-     var http = __require("http");
-     var net = __require("net");
-     var tls = __require("tls");
-     var { randomBytes, createHash } = __require("crypto");
-     var { Readable } = __require("stream");
-     var { URL: URL2 } = __require("url");
+     var EventEmitter = require("events");
+     var https = require("https");
+     var http = require("http");
+     var net = require("net");
+     var tls = require("tls");
+     var { randomBytes, createHash } = require("crypto");
+     var { Readable } = require("stream");
+     var { URL: URL2 } = require("url");
      var PerMessageDeflate = require_permessage_deflate();
      var Receiver = require_receiver();
      var Sender = require_sender();
@@ -21589,7 +21587,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      });
      WebSocket2.prototype.addEventListener = addEventListener;
      WebSocket2.prototype.removeEventListener = removeEventListener;
-     module.exports = WebSocket2;
+     module2.exports = WebSocket2;
      function initAsClient(websocket, address, protocols, options) {
        const opts = {
          protocolVersion: protocolVersions[1],
@@ -21941,9 +21939,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ws/lib/stream.js
  var require_stream2 = __commonJS({
-   "node_modules/ws/lib/stream.js"(exports, module) {
+   "node_modules/ws/lib/stream.js"(exports, module2) {
      "use strict";
-     var { Duplex } = __require("stream");
+     var { Duplex } = require("stream");
      function emitClose(stream) {
        stream.emit("close");
      }
@@ -22058,20 +22056,20 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        duplex.on("error", duplexOnError);
        return duplex;
      }
-     module.exports = createWebSocketStream;
+     module2.exports = createWebSocketStream;
    }
  });
  
  // node_modules/ws/lib/websocket-server.js
  var require_websocket_server = __commonJS({
-   "node_modules/ws/lib/websocket-server.js"(exports, module) {
+   "node_modules/ws/lib/websocket-server.js"(exports, module2) {
      "use strict";
-     var EventEmitter = __require("events");
-     var http = __require("http");
-     var https = __require("https");
-     var net = __require("net");
-     var tls = __require("tls");
-     var { createHash } = __require("crypto");
+     var EventEmitter = require("events");
+     var http = require("http");
+     var https = require("https");
+     var net = require("net");
+     var tls = require("tls");
+     var { createHash } = require("crypto");
      var PerMessageDeflate = require_permessage_deflate();
      var WebSocket2 = require_websocket();
      var { format, parse } = require_extension();
@@ -22273,7 +22271,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          cb(ws, req);
        }
      };
-     module.exports = WebSocketServer;
+     module2.exports = WebSocketServer;
      function addListeners(server, map) {
        for (const event of Object.keys(map))
          server.on(event, map[event]);
@@ -22315,20 +22313,20 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/ws/index.js
  var require_ws = __commonJS({
-   "node_modules/ws/index.js"(exports, module) {
+   "node_modules/ws/index.js"(exports, module2) {
      "use strict";
      var WebSocket2 = require_websocket();
      WebSocket2.createWebSocketStream = require_stream2();
      WebSocket2.Server = require_websocket_server();
      WebSocket2.Receiver = require_receiver();
      WebSocket2.Sender = require_sender();
-     module.exports = WebSocket2;
+     module2.exports = WebSocket2;
    }
  });
  
  // node_modules/simple-websocket/index.js
  var require_simple_websocket = __commonJS({
-   "node_modules/simple-websocket/index.js"(exports, module) {
+   "node_modules/simple-websocket/index.js"(exports, module2) {
      var debug = require_src()("simple-websocket");
      var randombytes2 = require_randombytes();
      var stream = require_readable();
@@ -22534,13 +22532,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
      };
      Socket.WEBSOCKET_SUPPORT = !!_WebSocket;
-     module.exports = Socket;
+     module2.exports = Socket;
    }
  });
  
  // node_modules/bittorrent-tracker/lib/client/websocket-tracker.js
  var require_websocket_tracker = __commonJS({
-   "node_modules/bittorrent-tracker/lib/client/websocket-tracker.js"(exports, module) {
+   "node_modules/bittorrent-tracker/lib/client/websocket-tracker.js"(exports, module2) {
      var clone = require_clone();
      var debug = require_src()("bittorrent-tracker:websocket-tracker");
      var Peer = require_simple_peer();
@@ -22905,15 +22903,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      WebSocketTracker._socketPool = socketPool;
      function noop2() {
      }
-     module.exports = WebSocketTracker;
+     module2.exports = WebSocketTracker;
    }
  });
  
  // node_modules/bittorrent-tracker/client.js
  var require_client2 = __commonJS({
-   "node_modules/bittorrent-tracker/client.js"(exports, module) {
+   "node_modules/bittorrent-tracker/client.js"(exports, module2) {
      var debug = require_src()("bittorrent-tracker:client");
-     var EventEmitter = __require("events");
+     var EventEmitter = require("events");
      var once = require_once();
      var parallel2 = require_run_parallel();
      var Peer = require_simple_peer();
@@ -23098,15 +23096,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        client.scrape({ infoHash: opts.infoHash });
        return client;
      };
-     module.exports = Client;
+     module2.exports = Client;
    }
  });
  
  // node_modules/bittorrent-lsd/index.js
  var require_bittorrent_lsd = __commonJS({
-   "node_modules/bittorrent-lsd/index.js"(exports, module) {
-     var dgram = __require("dgram");
-     var EventEmitter = __require("events").EventEmitter;
+   "node_modules/bittorrent-lsd/index.js"(exports, module2) {
+     var dgram = require("dgram");
+     var EventEmitter = require("events").EventEmitter;
      var debug = require_src()("bittorrent-lsd");
      var ANNOUNCE_INTERVAL = 3e5;
      var LSD_HOST = "239.192.152.143";
@@ -23222,16 +23220,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.server.send(announce, LSD_PORT, LSD_HOST);
        }
      };
-     module.exports = LSD;
+     module2.exports = LSD;
    }
  });
  
  // node_modules/torrent-discovery/index.js
  var require_torrent_discovery = __commonJS({
-   "node_modules/torrent-discovery/index.js"(exports, module) {
+   "node_modules/torrent-discovery/index.js"(exports, module2) {
      var debug = require_src()("torrent-discovery");
      var DHT = require_client();
-     var EventEmitter = __require("events").EventEmitter;
+     var EventEmitter = require("events").EventEmitter;
      var parallel2 = require_run_parallel();
      var Tracker = require_client2();
      var LSD = require_bittorrent_lsd();
@@ -23420,14 +23418,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return lsd;
        }
      };
-     module.exports = Discovery;
+     module2.exports = Discovery;
    }
  });
  
  // node_modules/random-access-storage/index.js
  var require_random_access_storage = __commonJS({
-   "node_modules/random-access-storage/index.js"(exports, module) {
-     var events = __require("events");
+   "node_modules/random-access-storage/index.js"(exports, module2) {
+     var events = require("events");
      var inherits = require_inherits();
      var queueTick = require_process_next_tick();
      var NOT_READABLE = defaultImpl(new Error("Not readable"));
@@ -23442,7 +23440,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var OPEN_OP = 4;
      var CLOSE_OP = 5;
      var DESTROY_OP = 6;
-     module.exports = RandomAccess;
+     module2.exports = RandomAccess;
      function RandomAccess(opts) {
        if (!(this instanceof RandomAccess))
          return new RandomAccess(opts);
@@ -23687,11 +23685,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/mkdirp-classic/index.js
  var require_mkdirp_classic = __commonJS({
-   "node_modules/mkdirp-classic/index.js"(exports, module) {
-     var path2 = __require("path");
-     var fs2 = __require("fs");
+   "node_modules/mkdirp-classic/index.js"(exports, module2) {
+     var path2 = require("path");
+     var fs2 = require("fs");
      var _0777 = parseInt("0777", 8);
-     module.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
+     module2.exports = mkdirP.mkdirp = mkdirP.mkdirP = mkdirP;
      function mkdirP(p, opts, f, made) {
        if (typeof opts === "function") {
          f = opts;
@@ -23774,16 +23772,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/random-access-file/index.js
  var require_random_access_file = __commonJS({
-   "node_modules/random-access-file/index.js"(exports, module) {
-     var inherits = __require("util").inherits;
+   "node_modules/random-access-file/index.js"(exports, module2) {
+     var inherits = require("util").inherits;
      var RandomAccess = require_random_access_storage();
-     var fs2 = __require("fs");
+     var fs2 = require("fs");
      var mkdirp = require_mkdirp_classic();
-     var path2 = __require("path");
-     var constants = fs2.constants || __require("constants");
+     var path2 = require("path");
+     var constants = fs2.constants || require("constants");
      var READONLY = constants.O_RDONLY;
      var READWRITE = constants.O_RDWR | constants.O_CREAT;
-     module.exports = RandomAccessFile;
+     module2.exports = RandomAccessFile;
      function RandomAccessFile(filename, opts) {
        if (!(this instanceof RandomAccessFile))
          return new RandomAccessFile(filename, opts);
@@ -23963,11 +23961,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/thunky/index.js
  var require_thunky = __commonJS({
-   "node_modules/thunky/index.js"(exports, module) {
+   "node_modules/thunky/index.js"(exports, module2) {
      "use strict";
      var nextTick2 = nextTickArgs;
      process.nextTick(upgrade, 42);
-     module.exports = thunky2;
+     module2.exports = thunky2;
      function thunky2(fn) {
        var state = run;
        return thunk;
@@ -24014,12 +24012,12 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/webtorrent/node_modules/fs-chunk-store/index.js
  var require_fs_chunk_store = __commonJS({
-   "node_modules/webtorrent/node_modules/fs-chunk-store/index.js"(exports, module) {
-     module.exports = Storage2;
-     var fs2 = __require("fs");
-     var os2 = __require("os");
+   "node_modules/webtorrent/node_modules/fs-chunk-store/index.js"(exports, module2) {
+     module2.exports = Storage2;
+     var fs2 = require("fs");
+     var os2 = require("os");
      var parallel2 = require_run_parallel();
-     var path2 = __require("path");
+     var path2 = require("path");
      var queueMicrotask3 = require_queue_microtask();
      var raf2 = require_random_access_file();
      var randombytes2 = require_randombytes();
@@ -24264,7 +24262,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/immediate-chunk-store/index.js
  var require_immediate_chunk_store = __commonJS({
-   "node_modules/immediate-chunk-store/index.js"(exports, module) {
+   "node_modules/immediate-chunk-store/index.js"(exports, module2) {
      var queueMicrotask3 = require_queue_microtask();
      var ImmediateStore = class {
        constructor(store) {
@@ -24309,17 +24307,17 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.store.destroy(cb);
        }
      };
-     module.exports = ImmediateStore;
+     module2.exports = ImmediateStore;
    }
  });
  
  // node_modules/lt_donthave/index.js
  var require_lt_donthave = __commonJS({
-   "node_modules/lt_donthave/index.js"(exports, module) {
+   "node_modules/lt_donthave/index.js"(exports, module2) {
      var arrayRemove = require_unordered_array_remove();
-     var { EventEmitter } = __require("events");
+     var { EventEmitter } = require("events");
      var debug = require_src()("lt_donthave");
-     module.exports = () => {
+     module2.exports = () => {
        class ltDontHave extends EventEmitter {
          constructor(wire) {
            super();
@@ -24371,8 +24369,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/memory-chunk-store/index.js
  var require_memory_chunk_store = __commonJS({
-   "node_modules/memory-chunk-store/index.js"(exports, module) {
-     module.exports = Storage2;
+   "node_modules/memory-chunk-store/index.js"(exports, module2) {
+     module2.exports = Storage2;
      var queueMicrotask3 = require_queue_microtask();
      function Storage2(chunkLength, opts) {
        if (!(this instanceof Storage2))
@@ -24438,8 +24436,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/run-parallel-limit/index.js
  var require_run_parallel_limit = __commonJS({
-   "node_modules/run-parallel-limit/index.js"(exports, module) {
-     module.exports = runParallelLimit;
+   "node_modules/run-parallel-limit/index.js"(exports, module2) {
+     module2.exports = runParallelLimit;
      var queueMicrotask3 = require_queue_microtask();
      function runParallelLimit(tasks, limit, cb) {
        if (typeof limit !== "number")
@@ -24518,7 +24516,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/torrent-piece/index.js
  var require_torrent_piece = __commonJS({
-   "node_modules/torrent-piece/index.js"(exports, module) {
+   "node_modules/torrent-piece/index.js"(exports, module2) {
      var BLOCK_LENGTH = 1 << 14;
      var Piece = class {
        constructor(length) {
@@ -24620,13 +24618,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
      };
      Object.defineProperty(Piece, "BLOCK_LENGTH", { value: BLOCK_LENGTH });
-     module.exports = Piece;
+     module2.exports = Piece;
    }
  });
  
  // node_modules/end-of-stream/index.js
  var require_end_of_stream2 = __commonJS({
-   "node_modules/end-of-stream/index.js"(exports, module) {
+   "node_modules/end-of-stream/index.js"(exports, module2) {
      var once = require_once();
      var noop2 = function() {
      };
@@ -24715,16 +24713,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          stream.removeListener("close", onclose);
        };
      };
-     module.exports = eos;
+     module2.exports = eos;
    }
  });
  
  // node_modules/pump/index.js
  var require_pump = __commonJS({
-   "node_modules/pump/index.js"(exports, module) {
+   "node_modules/pump/index.js"(exports, module2) {
      var once = require_once();
      var eos = require_end_of_stream2();
-     var fs2 = __require("fs");
+     var fs2 = require("fs");
      var noop2 = function() {
      };
      var ancient = /^v?\.0/.test(process.version);
@@ -24799,13 +24797,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        });
        return streams.reduce(pipe);
      };
-     module.exports = pump;
+     module2.exports = pump;
    }
  });
  
  // node_modules/random-iterate/index.js
  var require_random_iterate = __commonJS({
-   "node_modules/random-iterate/index.js"(exports, module) {
+   "node_modules/random-iterate/index.js"(exports, module2) {
      var iterate = function(list) {
        var offset = 0;
        return function() {
@@ -24821,14 +24819,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return el;
        };
      };
-     module.exports = iterate;
+     module2.exports = iterate;
    }
  });
  
  // node_modules/ut_metadata/index.js
  var require_ut_metadata = __commonJS({
-   "node_modules/ut_metadata/index.js"(exports, module) {
-     var { EventEmitter } = __require("events");
+   "node_modules/ut_metadata/index.js"(exports, module2) {
+     var { EventEmitter } = require("events");
      var bencode = require_lib();
      var BitField = require_lib2().default;
      var debug = require_src()("ut_metadata");
@@ -24836,7 +24834,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var MAX_METADATA_SIZE = 1e7;
      var BITFIELD_GROW = 1e3;
      var PIECE_LENGTH = 1 << 14;
-     module.exports = (metadata) => {
+     module2.exports = (metadata) => {
        class utMetadata extends EventEmitter {
          constructor(wire) {
            super();
@@ -25017,10 +25015,10 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/string2compact/index.js
  var require_string2compact = __commonJS({
-   "node_modules/string2compact/index.js"(exports, module) {
+   "node_modules/string2compact/index.js"(exports, module2) {
      var addrToIPPort = require_addr_to_ip_port();
      var ipaddr = require_ipaddr();
-     module.exports = (addrs) => {
+     module2.exports = (addrs) => {
        if (typeof addrs === "string") {
          addrs = [addrs];
        }
@@ -25037,15 +25035,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return Buffer.concat([ipBuf, portBuf]);
        }));
      };
-     module.exports.multi = module.exports;
-     module.exports.multi6 = module.exports;
+     module2.exports.multi = module2.exports;
+     module2.exports.multi6 = module2.exports;
    }
  });
  
  // node_modules/ut_pex/index.js
  var require_ut_pex = __commonJS({
-   "node_modules/ut_pex/index.js"(exports, module) {
-     var EventEmitter = __require("events").EventEmitter;
+   "node_modules/ut_pex/index.js"(exports, module2) {
+     var EventEmitter = require("events").EventEmitter;
      var compact2string = require_compact2string();
      var string2compact = require_string2compact();
      var bencode = require_lib();
@@ -25059,7 +25057,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        supportsUtHolepunch: 8,
        isReachable: 16
      };
-     module.exports = () => {
+     module2.exports = () => {
        class utPex extends EventEmitter {
          constructor(wire) {
            super();
@@ -25229,8 +25227,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/render-media/lib/mime.json
  var require_mime = __commonJS({
-   "node_modules/render-media/lib/mime.json"(exports, module) {
-     module.exports = {
+   "node_modules/render-media/lib/mime.json"(exports, module2) {
+     module2.exports = {
        ".3gp": "video/3gpp",
        ".aac": "audio/aac",
        ".aif": "audio/x-aiff",
@@ -25318,9 +25316,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/is-ascii/index.js
  var require_is_ascii = __commonJS({
-   "node_modules/is-ascii/index.js"(exports, module) {
+   "node_modules/is-ascii/index.js"(exports, module2) {
      var MAX_ASCII_CHAR_CODE = 127;
-     module.exports = function isAscii(str) {
+     module2.exports = function isAscii(str) {
        for (var i = 0, strLen = str.length; i < strLen; ++i) {
          if (str.charCodeAt(i) > MAX_ASCII_CHAR_CODE)
            return false;
@@ -25332,9 +25330,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/to-arraybuffer/index.js
  var require_to_arraybuffer = __commonJS({
-   "node_modules/to-arraybuffer/index.js"(exports, module) {
-     var Buffer2 = __require("buffer").Buffer;
-     module.exports = function(buf) {
+   "node_modules/to-arraybuffer/index.js"(exports, module2) {
+     var Buffer2 = require("buffer").Buffer;
+     module2.exports = function(buf) {
        if (buf instanceof Uint8Array) {
          if (buf.byteOffset === 0 && buf.byteLength === buf.buffer.byteLength) {
            return buf.buffer;
@@ -25358,8 +25356,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/mediasource/index.js
  var require_mediasource = __commonJS({
-   "node_modules/mediasource/index.js"(exports, module) {
-     module.exports = MediaElementWrapper;
+   "node_modules/mediasource/index.js"(exports, module2) {
+     module2.exports = MediaElementWrapper;
      var inherits = require_inherits();
      var stream = require_readable();
      var toArrayBuffer = require_to_arraybuffer();
@@ -25598,8 +25596,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/stream-to-blob/index.js
  var require_stream_to_blob = __commonJS({
-   "node_modules/stream-to-blob/index.js"(exports, module) {
-     module.exports = streamToBlob;
+   "node_modules/stream-to-blob/index.js"(exports, module2) {
+     module2.exports = streamToBlob;
      function streamToBlob(stream, mimeType) {
        if (mimeType != null && typeof mimeType !== "string") {
          throw new Error("Invalid mimetype, expected string.");
@@ -25617,8 +25615,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/stream-to-blob-url/index.js
  var require_stream_to_blob_url = __commonJS({
-   "node_modules/stream-to-blob-url/index.js"(exports, module) {
-     module.exports = getBlobURL;
+   "node_modules/stream-to-blob-url/index.js"(exports, module2) {
+     module2.exports = getBlobURL;
      var getBlob = require_stream_to_blob();
      async function getBlobURL(stream, mimeType) {
        const blob = await getBlob(stream, mimeType);
@@ -25630,8 +25628,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/binary-search/index.js
  var require_binary_search = __commonJS({
-   "node_modules/binary-search/index.js"(exports, module) {
-     module.exports = function(haystack, needle, comparator, low, high) {
+   "node_modules/binary-search/index.js"(exports, module2) {
+     module2.exports = function(haystack, needle, comparator, low, high) {
        var mid, cmp;
        if (low === void 0)
          low = 0;
@@ -25664,8 +25662,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/next-event/index.js
  var require_next_event = __commonJS({
-   "node_modules/next-event/index.js"(exports, module) {
-     module.exports = nextEvent;
+   "node_modules/next-event/index.js"(exports, module2) {
+     module2.exports = nextEvent;
      function nextEvent(emitter, name) {
        var next = null;
        emitter.on(name, function(data) {
@@ -25684,7 +25682,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/buffer-fill/index.js
  var require_buffer_fill = __commonJS({
-   "node_modules/buffer-fill/index.js"(exports, module) {
+   "node_modules/buffer-fill/index.js"(exports, module2) {
      var hasFullSupport = function() {
        try {
          if (!Buffer.isEncoding("latin1")) {
@@ -25769,13 +25767,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        }
        return fillWithNumber(buffer, 0, start, end);
      }
-     module.exports = fill;
+     module2.exports = fill;
    }
  });
  
  // node_modules/buffer-alloc-unsafe/index.js
  var require_buffer_alloc_unsafe = __commonJS({
-   "node_modules/buffer-alloc-unsafe/index.js"(exports, module) {
+   "node_modules/buffer-alloc-unsafe/index.js"(exports, module2) {
      function allocUnsafe(size) {
        if (typeof size !== "number") {
          throw new TypeError('"size" argument must be a number');
@@ -25789,16 +25787,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          return new Buffer(size);
        }
      }
-     module.exports = allocUnsafe;
+     module2.exports = allocUnsafe;
    }
  });
  
  // node_modules/buffer-alloc/index.js
  var require_buffer_alloc = __commonJS({
-   "node_modules/buffer-alloc/index.js"(exports, module) {
+   "node_modules/buffer-alloc/index.js"(exports, module2) {
      var bufferFill = require_buffer_fill();
      var allocUnsafe = require_buffer_alloc_unsafe();
-     module.exports = function alloc(size, fill, encoding) {
+     module2.exports = function alloc(size, fill, encoding) {
        if (typeof size !== "number") {
          throw new TypeError('"size" argument must be a number');
        }
@@ -27003,7 +27001,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/mp4-stream/decode.js
  var require_decode2 = __commonJS({
-   "node_modules/mp4-stream/decode.js"(exports, module) {
+   "node_modules/mp4-stream/decode.js"(exports, module2) {
      var stream = require_readable();
      var nextEvent = require_next_event();
      var Box = require_mp4_box_encoding();
@@ -27175,13 +27173,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.emit("close");
        }
      };
-     module.exports = Decoder;
+     module2.exports = Decoder;
    }
  });
  
  // node_modules/mp4-stream/encode.js
  var require_encode2 = __commonJS({
-   "node_modules/mp4-stream/encode.js"(exports, module) {
+   "node_modules/mp4-stream/encode.js"(exports, module2) {
      var stream = require_readable();
      var Box = require_mp4_box_encoding();
      var queueMicrotask3 = require_queue_microtask();
@@ -27308,7 +27306,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this.emit("close");
        }
      };
-     module.exports = Encoder;
+     module2.exports = Encoder;
    }
  });
  
@@ -27324,7 +27322,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/range-slice-stream/index.js
  var require_range_slice_stream = __commonJS({
-   "node_modules/range-slice-stream/index.js"(exports, module) {
+   "node_modules/range-slice-stream/index.js"(exports, module2) {
      var { Writable, PassThrough } = require_readable();
      var RangeSliceStream = class extends Writable {
        constructor(offset, opts = {}) {
@@ -27408,15 +27406,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
            this.emit("error", err);
        }
      };
-     module.exports = RangeSliceStream;
+     module2.exports = RangeSliceStream;
    }
  });
  
  // node_modules/videostream/mp4-remuxer.js
  var require_mp4_remuxer = __commonJS({
-   "node_modules/videostream/mp4-remuxer.js"(exports, module) {
+   "node_modules/videostream/mp4-remuxer.js"(exports, module2) {
      var bs = require_binary_search();
-     var EventEmitter = __require("events");
+     var EventEmitter = require("events");
      var mp4 = require_mp4_stream();
      var Box = require_mp4_box_encoding();
      var RangeSliceStream = require_range_slice_stream();
@@ -27811,13 +27809,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        };
      }
      var MIN_FRAGMENT_DURATION = 1;
-     module.exports = MP4Remuxer;
+     module2.exports = MP4Remuxer;
    }
  });
  
  // node_modules/videostream/videostream.js
  var require_videostream = __commonJS({
-   "node_modules/videostream/videostream.js"(exports, module) {
+   "node_modules/videostream/videostream.js"(exports, module2) {
      var MediaElementWrapper = require_mediasource();
      var pump = require_pump();
      var MP4Remuxer = require_mp4_remuxer();
@@ -27929,7 +27927,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this._elem.src = "";
        }
      };
-     module.exports = VideoStream;
+     module2.exports = VideoStream;
    }
  });
  
@@ -27942,7 +27940,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      var debug = require_src()("render-media");
      var isAscii = require_is_ascii();
      var MediaElementWrapper = require_mediasource();
-     var path2 = __require("path");
+     var path2 = require("path");
      var streamToBlobURL = require_stream_to_blob_url();
      var VideoStream = require_videostream();
      var VIDEOSTREAM_EXTS = [
@@ -28291,7 +28289,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/fast-blob-stream/index.js
  var require_fast_blob_stream = __commonJS({
-   "node_modules/fast-blob-stream/index.js"(exports, module) {
+   "node_modules/fast-blob-stream/index.js"(exports, module2) {
      var { Readable, Writable } = require_streamx();
      require_fast_readable_async_iterator();
      function BlobReadStream(blob, opts = {}) {
@@ -28313,15 +28311,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          cb();
        }
      };
-     module.exports = { BlobWriteStream, BlobReadStream };
+     module2.exports = { BlobWriteStream, BlobReadStream };
    }
  });
  
  // node_modules/stream-with-known-length-to-buffer/index.js
  var require_stream_with_known_length_to_buffer = __commonJS({
-   "node_modules/stream-with-known-length-to-buffer/index.js"(exports, module) {
+   "node_modules/stream-with-known-length-to-buffer/index.js"(exports, module2) {
      var once = require_once();
-     module.exports = function getBuffer(stream, length, cb) {
+     module2.exports = function getBuffer(stream, length, cb) {
        cb = once(cb);
        var buf = Buffer.alloc(length);
        var offset = 0;
@@ -28337,9 +28335,9 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/range-parser/index.js
  var require_range_parser = __commonJS({
-   "node_modules/range-parser/index.js"(exports, module) {
+   "node_modules/range-parser/index.js"(exports, module2) {
      "use strict";
-     module.exports = rangeParser;
+     module2.exports = rangeParser;
      function rangeParser(size, str, options) {
        if (typeof str !== "string") {
          throw new TypeError("argument str must be a string");
@@ -28418,7 +28416,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/mime/Mime.js
  var require_Mime = __commonJS({
-   "node_modules/mime/Mime.js"(exports, module) {
+   "node_modules/mime/Mime.js"(exports, module2) {
      "use strict";
      function Mime() {
        this._types = /* @__PURE__ */ Object.create(null);
@@ -28466,36 +28464,36 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        type = /^\s*([^;\s]*)/.test(type) && RegExp.$1;
        return type && this._extensions[type.toLowerCase()] || null;
      };
-     module.exports = Mime;
+     module2.exports = Mime;
    }
  });
  
  // node_modules/mime/types/standard.js
  var require_standard = __commonJS({
-   "node_modules/mime/types/standard.js"(exports, module) {
-     module.exports = { "application/andrew-inset": ["ez"], "application/applixware": ["aw"], "application/atom+xml": ["atom"], "application/atomcat+xml": ["atomcat"], "application/atomdeleted+xml": ["atomdeleted"], "application/atomsvc+xml": ["atomsvc"], "application/atsc-dwd+xml": ["dwd"], "application/atsc-held+xml": ["held"], "application/atsc-rsat+xml": ["rsat"], "application/bdoc": ["bdoc"], "application/calendar+xml": ["xcs"], "application/ccxml+xml": ["ccxml"], "application/cdfx+xml": ["cdfx"], "application/cdmi-capability": ["cdmia"], "application/cdmi-container": ["cdmic"], "application/cdmi-domain": ["cdmid"], "application/cdmi-object": ["cdmio"], "application/cdmi-queue": ["cdmiq"], "application/cu-seeme": ["cu"], "application/dash+xml": ["mpd"], "application/davmount+xml": ["davmount"], "application/docbook+xml": ["dbk"], "application/dssc+der": ["dssc"], "application/dssc+xml": ["xdssc"], "application/ecmascript": ["es", "ecma"], "application/emma+xml": ["emma"], "application/emotionml+xml": ["emotionml"], "application/epub+zip": ["epub"], "application/exi": ["exi"], "application/express": ["exp"], "application/fdt+xml": ["fdt"], "application/font-tdpfr": ["pfr"], "application/geo+json": ["geojson"], "application/gml+xml": ["gml"], "application/gpx+xml": ["gpx"], "application/gxf": ["gxf"], "application/gzip": ["gz"], "application/hjson": ["hjson"], "application/hyperstudio": ["stk"], "application/inkml+xml": ["ink", "inkml"], "application/ipfix": ["ipfix"], "application/its+xml": ["its"], "application/java-archive": ["jar", "war", "ear"], "application/java-serialized-object": ["ser"], "application/java-vm": ["class"], "application/javascript": ["js", "mjs"], "application/json": ["json", "map"], "application/json5": ["json5"], "application/jsonml+json": ["jsonml"], "application/ld+json": ["jsonld"], "application/lgr+xml": ["lgr"], "application/lost+xml": ["lostxml"], "application/mac-binhex40": ["hqx"], "application/mac-compactpro": ["cpt"], "application/mads+xml": ["mads"], "application/manifest+json": ["webmanifest"], "application/marc": ["mrc"], "application/marcxml+xml": ["mrcx"], "application/mathematica": ["ma", "nb", "mb"], "application/mathml+xml": ["mathml"], "application/mbox": ["mbox"], "application/mediaservercontrol+xml": ["mscml"], "application/metalink+xml": ["metalink"], "application/metalink4+xml": ["meta4"], "application/mets+xml": ["mets"], "application/mmt-aei+xml": ["maei"], "application/mmt-usd+xml": ["musd"], "application/mods+xml": ["mods"], "application/mp21": ["m21", "mp21"], "application/mp4": ["mp4s", "m4p"], "application/msword": ["doc", "dot"], "application/mxf": ["mxf"], "application/n-quads": ["nq"], "application/n-triples": ["nt"], "application/node": ["cjs"], "application/octet-stream": ["bin", "dms", "lrf", "mar", "so", "dist", "distz", "pkg", "bpk", "dump", "elc", "deploy", "exe", "dll", "deb", "dmg", "iso", "img", "msi", "msp", "msm", "buffer"], "application/oda": ["oda"], "application/oebps-package+xml": ["opf"], "application/ogg": ["ogx"], "application/omdoc+xml": ["omdoc"], "application/onenote": ["onetoc", "onetoc2", "onetmp", "onepkg"], "application/oxps": ["oxps"], "application/p2p-overlay+xml": ["relo"], "application/patch-ops-error+xml": ["xer"], "application/pdf": ["pdf"], "application/pgp-encrypted": ["pgp"], "application/pgp-signature": ["asc", "sig"], "application/pics-rules": ["prf"], "application/pkcs10": ["p10"], "application/pkcs7-mime": ["p7m", "p7c"], "application/pkcs7-signature": ["p7s"], "application/pkcs8": ["p8"], "application/pkix-attr-cert": ["ac"], "application/pkix-cert": ["cer"], "application/pkix-crl": ["crl"], "application/pkix-pkipath": ["pkipath"], "application/pkixcmp": ["pki"], "application/pls+xml": ["pls"], "application/postscript": ["ai", "eps", "ps"], "application/provenance+xml": ["provx"], "application/pskc+xml": ["pskcxml"], "application/raml+yaml": ["raml"], "application/rdf+xml": ["rdf", "owl"], "application/reginfo+xml": ["rif"], "application/relax-ng-compact-syntax": ["rnc"], "application/resource-lists+xml": ["rl"], "application/resource-lists-diff+xml": ["rld"], "application/rls-services+xml": ["rs"], "application/route-apd+xml": ["rapd"], "application/route-s-tsid+xml": ["sls"], "application/route-usd+xml": ["rusd"], "application/rpki-ghostbusters": ["gbr"], "application/rpki-manifest": ["mft"], "application/rpki-roa": ["roa"], "application/rsd+xml": ["rsd"], "application/rss+xml": ["rss"], "application/rtf": ["rtf"], "application/sbml+xml": ["sbml"], "application/scvp-cv-request": ["scq"], "application/scvp-cv-response": ["scs"], "application/scvp-vp-request": ["spq"], "application/scvp-vp-response": ["spp"], "application/sdp": ["sdp"], "application/senml+xml": ["senmlx"], "application/sensml+xml": ["sensmlx"], "application/set-payment-initiation": ["setpay"], "application/set-registration-initiation": ["setreg"], "application/shf+xml": ["shf"], "application/sieve": ["siv", "sieve"], "application/smil+xml": ["smi", "smil"], "application/sparql-query": ["rq"], "application/sparql-results+xml": ["srx"], "application/srgs": ["gram"], "application/srgs+xml": ["grxml"], "application/sru+xml": ["sru"], "application/ssdl+xml": ["ssdl"], "application/ssml+xml": ["ssml"], "application/swid+xml": ["swidtag"], "application/tei+xml": ["tei", "teicorpus"], "application/thraud+xml": ["tfi"], "application/timestamped-data": ["tsd"], "application/toml": ["toml"], "application/trig": ["trig"], "application/ttml+xml": ["ttml"], "application/ubjson": ["ubj"], "application/urc-ressheet+xml": ["rsheet"], "application/urc-targetdesc+xml": ["td"], "application/voicexml+xml": ["vxml"], "application/wasm": ["wasm"], "application/widget": ["wgt"], "application/winhlp": ["hlp"], "application/wsdl+xml": ["wsdl"], "application/wspolicy+xml": ["wspolicy"], "application/xaml+xml": ["xaml"], "application/xcap-att+xml": ["xav"], "application/xcap-caps+xml": ["xca"], "application/xcap-diff+xml": ["xdf"], "application/xcap-el+xml": ["xel"], "application/xcap-ns+xml": ["xns"], "application/xenc+xml": ["xenc"], "application/xhtml+xml": ["xhtml", "xht"], "application/xliff+xml": ["xlf"], "application/xml": ["xml", "xsl", "xsd", "rng"], "application/xml-dtd": ["dtd"], "application/xop+xml": ["xop"], "application/xproc+xml": ["xpl"], "application/xslt+xml": ["*xsl", "xslt"], "application/xspf+xml": ["xspf"], "application/xv+xml": ["mxml", "xhvml", "xvml", "xvm"], "application/yang": ["yang"], "application/yin+xml": ["yin"], "application/zip": ["zip"], "audio/3gpp": ["*3gpp"], "audio/adpcm": ["adp"], "audio/amr": ["amr"], "audio/basic": ["au", "snd"], "audio/midi": ["mid", "midi", "kar", "rmi"], "audio/mobile-xmf": ["mxmf"], "audio/mp3": ["*mp3"], "audio/mp4": ["m4a", "mp4a"], "audio/mpeg": ["mpga", "mp2", "mp2a", "mp3", "m2a", "m3a"], "audio/ogg": ["oga", "ogg", "spx", "opus"], "audio/s3m": ["s3m"], "audio/silk": ["sil"], "audio/wav": ["wav"], "audio/wave": ["*wav"], "audio/webm": ["weba"], "audio/xm": ["xm"], "font/collection": ["ttc"], "font/otf": ["otf"], "font/ttf": ["ttf"], "font/woff": ["woff"], "font/woff2": ["woff2"], "image/aces": ["exr"], "image/apng": ["apng"], "image/avif": ["avif"], "image/bmp": ["bmp"], "image/cgm": ["cgm"], "image/dicom-rle": ["drle"], "image/emf": ["emf"], "image/fits": ["fits"], "image/g3fax": ["g3"], "image/gif": ["gif"], "image/heic": ["heic"], "image/heic-sequence": ["heics"], "image/heif": ["heif"], "image/heif-sequence": ["heifs"], "image/hej2k": ["hej2"], "image/hsj2": ["hsj2"], "image/ief": ["ief"], "image/jls": ["jls"], "image/jp2": ["jp2", "jpg2"], "image/jpeg": ["jpeg", "jpg", "jpe"], "image/jph": ["jph"], "image/jphc": ["jhc"], "image/jpm": ["jpm"], "image/jpx": ["jpx", "jpf"], "image/jxr": ["jxr"], "image/jxra": ["jxra"], "image/jxrs": ["jxrs"], "image/jxs": ["jxs"], "image/jxsc": ["jxsc"], "image/jxsi": ["jxsi"], "image/jxss": ["jxss"], "image/ktx": ["ktx"], "image/ktx2": ["ktx2"], "image/png": ["png"], "image/sgi": ["sgi"], "image/svg+xml": ["svg", "svgz"], "image/t38": ["t38"], "image/tiff": ["tif", "tiff"], "image/tiff-fx": ["tfx"], "image/webp": ["webp"], "image/wmf": ["wmf"], "message/disposition-notification": ["disposition-notification"], "message/global": ["u8msg"], "message/global-delivery-status": ["u8dsn"], "message/global-disposition-notification": ["u8mdn"], "message/global-headers": ["u8hdr"], "message/rfc822": ["eml", "mime"], "model/3mf": ["3mf"], "model/gltf+json": ["gltf"], "model/gltf-binary": ["glb"], "model/iges": ["igs", "iges"], "model/mesh": ["msh", "mesh", "silo"], "model/mtl": ["mtl"], "model/obj": ["obj"], "model/step+xml": ["stpx"], "model/step+zip": ["stpz"], "model/step-xml+zip": ["stpxz"], "model/stl": ["stl"], "model/vrml": ["wrl", "vrml"], "model/x3d+binary": ["*x3db", "x3dbz"], "model/x3d+fastinfoset": ["x3db"], "model/x3d+vrml": ["*x3dv", "x3dvz"], "model/x3d+xml": ["x3d", "x3dz"], "model/x3d-vrml": ["x3dv"], "text/cache-manifest": ["appcache", "manifest"], "text/calendar": ["ics", "ifb"], "text/coffeescript": ["coffee", "litcoffee"], "text/css": ["css"], "text/csv": ["csv"], "text/html": ["html", "htm", "shtml"], "text/jade": ["jade"], "text/jsx": ["jsx"], "text/less": ["less"], "text/markdown": ["markdown", "md"], "text/mathml": ["mml"], "text/mdx": ["mdx"], "text/n3": ["n3"], "text/plain": ["txt", "text", "conf", "def", "list", "log", "in", "ini"], "text/richtext": ["rtx"], "text/rtf": ["*rtf"], "text/sgml": ["sgml", "sgm"], "text/shex": ["shex"], "text/slim": ["slim", "slm"], "text/spdx": ["spdx"], "text/stylus": ["stylus", "styl"], "text/tab-separated-values": ["tsv"], "text/troff": ["t", "tr", "roff", "man", "me", "ms"], "text/turtle": ["ttl"], "text/uri-list": ["uri", "uris", "urls"], "text/vcard": ["vcard"], "text/vtt": ["vtt"], "text/xml": ["*xml"], "text/yaml": ["yaml", "yml"], "video/3gpp": ["3gp", "3gpp"], "video/3gpp2": ["3g2"], "video/h261": ["h261"], "video/h263": ["h263"], "video/h264": ["h264"], "video/iso.segment": ["m4s"], "video/jpeg": ["jpgv"], "video/jpm": ["*jpm", "jpgm"], "video/mj2": ["mj2", "mjp2"], "video/mp2t": ["ts"], "video/mp4": ["mp4", "mp4v", "mpg4"], "video/mpeg": ["mpeg", "mpg", "mpe", "m1v", "m2v"], "video/ogg": ["ogv"], "video/quicktime": ["qt", "mov"], "video/webm": ["webm"] };
+   "node_modules/mime/types/standard.js"(exports, module2) {
+     module2.exports = { "application/andrew-inset": ["ez"], "application/applixware": ["aw"], "application/atom+xml": ["atom"], "application/atomcat+xml": ["atomcat"], "application/atomdeleted+xml": ["atomdeleted"], "application/atomsvc+xml": ["atomsvc"], "application/atsc-dwd+xml": ["dwd"], "application/atsc-held+xml": ["held"], "application/atsc-rsat+xml": ["rsat"], "application/bdoc": ["bdoc"], "application/calendar+xml": ["xcs"], "application/ccxml+xml": ["ccxml"], "application/cdfx+xml": ["cdfx"], "application/cdmi-capability": ["cdmia"], "application/cdmi-container": ["cdmic"], "application/cdmi-domain": ["cdmid"], "application/cdmi-object": ["cdmio"], "application/cdmi-queue": ["cdmiq"], "application/cu-seeme": ["cu"], "application/dash+xml": ["mpd"], "application/davmount+xml": ["davmount"], "application/docbook+xml": ["dbk"], "application/dssc+der": ["dssc"], "application/dssc+xml": ["xdssc"], "application/ecmascript": ["es", "ecma"], "application/emma+xml": ["emma"], "application/emotionml+xml": ["emotionml"], "application/epub+zip": ["epub"], "application/exi": ["exi"], "application/express": ["exp"], "application/fdt+xml": ["fdt"], "application/font-tdpfr": ["pfr"], "application/geo+json": ["geojson"], "application/gml+xml": ["gml"], "application/gpx+xml": ["gpx"], "application/gxf": ["gxf"], "application/gzip": ["gz"], "application/hjson": ["hjson"], "application/hyperstudio": ["stk"], "application/inkml+xml": ["ink", "inkml"], "application/ipfix": ["ipfix"], "application/its+xml": ["its"], "application/java-archive": ["jar", "war", "ear"], "application/java-serialized-object": ["ser"], "application/java-vm": ["class"], "application/javascript": ["js", "mjs"], "application/json": ["json", "map"], "application/json5": ["json5"], "application/jsonml+json": ["jsonml"], "application/ld+json": ["jsonld"], "application/lgr+xml": ["lgr"], "application/lost+xml": ["lostxml"], "application/mac-binhex40": ["hqx"], "application/mac-compactpro": ["cpt"], "application/mads+xml": ["mads"], "application/manifest+json": ["webmanifest"], "application/marc": ["mrc"], "application/marcxml+xml": ["mrcx"], "application/mathematica": ["ma", "nb", "mb"], "application/mathml+xml": ["mathml"], "application/mbox": ["mbox"], "application/mediaservercontrol+xml": ["mscml"], "application/metalink+xml": ["metalink"], "application/metalink4+xml": ["meta4"], "application/mets+xml": ["mets"], "application/mmt-aei+xml": ["maei"], "application/mmt-usd+xml": ["musd"], "application/mods+xml": ["mods"], "application/mp21": ["m21", "mp21"], "application/mp4": ["mp4s", "m4p"], "application/msword": ["doc", "dot"], "application/mxf": ["mxf"], "application/n-quads": ["nq"], "application/n-triples": ["nt"], "application/node": ["cjs"], "application/octet-stream": ["bin", "dms", "lrf", "mar", "so", "dist", "distz", "pkg", "bpk", "dump", "elc", "deploy", "exe", "dll", "deb", "dmg", "iso", "img", "msi", "msp", "msm", "buffer"], "application/oda": ["oda"], "application/oebps-package+xml": ["opf"], "application/ogg": ["ogx"], "application/omdoc+xml": ["omdoc"], "application/onenote": ["onetoc", "onetoc2", "onetmp", "onepkg"], "application/oxps": ["oxps"], "application/p2p-overlay+xml": ["relo"], "application/patch-ops-error+xml": ["xer"], "application/pdf": ["pdf"], "application/pgp-encrypted": ["pgp"], "application/pgp-signature": ["asc", "sig"], "application/pics-rules": ["prf"], "application/pkcs10": ["p10"], "application/pkcs7-mime": ["p7m", "p7c"], "application/pkcs7-signature": ["p7s"], "application/pkcs8": ["p8"], "application/pkix-attr-cert": ["ac"], "application/pkix-cert": ["cer"], "application/pkix-crl": ["crl"], "application/pkix-pkipath": ["pkipath"], "application/pkixcmp": ["pki"], "application/pls+xml": ["pls"], "application/postscript": ["ai", "eps", "ps"], "application/provenance+xml": ["provx"], "application/pskc+xml": ["pskcxml"], "application/raml+yaml": ["raml"], "application/rdf+xml": ["rdf", "owl"], "application/reginfo+xml": ["rif"], "application/relax-ng-compact-syntax": ["rnc"], "application/resource-lists+xml": ["rl"], "application/resource-lists-diff+xml": ["rld"], "application/rls-services+xml": ["rs"], "application/route-apd+xml": ["rapd"], "application/route-s-tsid+xml": ["sls"], "application/route-usd+xml": ["rusd"], "application/rpki-ghostbusters": ["gbr"], "application/rpki-manifest": ["mft"], "application/rpki-roa": ["roa"], "application/rsd+xml": ["rsd"], "application/rss+xml": ["rss"], "application/rtf": ["rtf"], "application/sbml+xml": ["sbml"], "application/scvp-cv-request": ["scq"], "application/scvp-cv-response": ["scs"], "application/scvp-vp-request": ["spq"], "application/scvp-vp-response": ["spp"], "application/sdp": ["sdp"], "application/senml+xml": ["senmlx"], "application/sensml+xml": ["sensmlx"], "application/set-payment-initiation": ["setpay"], "application/set-registration-initiation": ["setreg"], "application/shf+xml": ["shf"], "application/sieve": ["siv", "sieve"], "application/smil+xml": ["smi", "smil"], "application/sparql-query": ["rq"], "application/sparql-results+xml": ["srx"], "application/srgs": ["gram"], "application/srgs+xml": ["grxml"], "application/sru+xml": ["sru"], "application/ssdl+xml": ["ssdl"], "application/ssml+xml": ["ssml"], "application/swid+xml": ["swidtag"], "application/tei+xml": ["tei", "teicorpus"], "application/thraud+xml": ["tfi"], "application/timestamped-data": ["tsd"], "application/toml": ["toml"], "application/trig": ["trig"], "application/ttml+xml": ["ttml"], "application/ubjson": ["ubj"], "application/urc-ressheet+xml": ["rsheet"], "application/urc-targetdesc+xml": ["td"], "application/voicexml+xml": ["vxml"], "application/wasm": ["wasm"], "application/widget": ["wgt"], "application/winhlp": ["hlp"], "application/wsdl+xml": ["wsdl"], "application/wspolicy+xml": ["wspolicy"], "application/xaml+xml": ["xaml"], "application/xcap-att+xml": ["xav"], "application/xcap-caps+xml": ["xca"], "application/xcap-diff+xml": ["xdf"], "application/xcap-el+xml": ["xel"], "application/xcap-ns+xml": ["xns"], "application/xenc+xml": ["xenc"], "application/xhtml+xml": ["xhtml", "xht"], "application/xliff+xml": ["xlf"], "application/xml": ["xml", "xsl", "xsd", "rng"], "application/xml-dtd": ["dtd"], "application/xop+xml": ["xop"], "application/xproc+xml": ["xpl"], "application/xslt+xml": ["*xsl", "xslt"], "application/xspf+xml": ["xspf"], "application/xv+xml": ["mxml", "xhvml", "xvml", "xvm"], "application/yang": ["yang"], "application/yin+xml": ["yin"], "application/zip": ["zip"], "audio/3gpp": ["*3gpp"], "audio/adpcm": ["adp"], "audio/amr": ["amr"], "audio/basic": ["au", "snd"], "audio/midi": ["mid", "midi", "kar", "rmi"], "audio/mobile-xmf": ["mxmf"], "audio/mp3": ["*mp3"], "audio/mp4": ["m4a", "mp4a"], "audio/mpeg": ["mpga", "mp2", "mp2a", "mp3", "m2a", "m3a"], "audio/ogg": ["oga", "ogg", "spx", "opus"], "audio/s3m": ["s3m"], "audio/silk": ["sil"], "audio/wav": ["wav"], "audio/wave": ["*wav"], "audio/webm": ["weba"], "audio/xm": ["xm"], "font/collection": ["ttc"], "font/otf": ["otf"], "font/ttf": ["ttf"], "font/woff": ["woff"], "font/woff2": ["woff2"], "image/aces": ["exr"], "image/apng": ["apng"], "image/avif": ["avif"], "image/bmp": ["bmp"], "image/cgm": ["cgm"], "image/dicom-rle": ["drle"], "image/emf": ["emf"], "image/fits": ["fits"], "image/g3fax": ["g3"], "image/gif": ["gif"], "image/heic": ["heic"], "image/heic-sequence": ["heics"], "image/heif": ["heif"], "image/heif-sequence": ["heifs"], "image/hej2k": ["hej2"], "image/hsj2": ["hsj2"], "image/ief": ["ief"], "image/jls": ["jls"], "image/jp2": ["jp2", "jpg2"], "image/jpeg": ["jpeg", "jpg", "jpe"], "image/jph": ["jph"], "image/jphc": ["jhc"], "image/jpm": ["jpm"], "image/jpx": ["jpx", "jpf"], "image/jxr": ["jxr"], "image/jxra": ["jxra"], "image/jxrs": ["jxrs"], "image/jxs": ["jxs"], "image/jxsc": ["jxsc"], "image/jxsi": ["jxsi"], "image/jxss": ["jxss"], "image/ktx": ["ktx"], "image/ktx2": ["ktx2"], "image/png": ["png"], "image/sgi": ["sgi"], "image/svg+xml": ["svg", "svgz"], "image/t38": ["t38"], "image/tiff": ["tif", "tiff"], "image/tiff-fx": ["tfx"], "image/webp": ["webp"], "image/wmf": ["wmf"], "message/disposition-notification": ["disposition-notification"], "message/global": ["u8msg"], "message/global-delivery-status": ["u8dsn"], "message/global-disposition-notification": ["u8mdn"], "message/global-headers": ["u8hdr"], "message/rfc822": ["eml", "mime"], "model/3mf": ["3mf"], "model/gltf+json": ["gltf"], "model/gltf-binary": ["glb"], "model/iges": ["igs", "iges"], "model/mesh": ["msh", "mesh", "silo"], "model/mtl": ["mtl"], "model/obj": ["obj"], "model/step+xml": ["stpx"], "model/step+zip": ["stpz"], "model/step-xml+zip": ["stpxz"], "model/stl": ["stl"], "model/vrml": ["wrl", "vrml"], "model/x3d+binary": ["*x3db", "x3dbz"], "model/x3d+fastinfoset": ["x3db"], "model/x3d+vrml": ["*x3dv", "x3dvz"], "model/x3d+xml": ["x3d", "x3dz"], "model/x3d-vrml": ["x3dv"], "text/cache-manifest": ["appcache", "manifest"], "text/calendar": ["ics", "ifb"], "text/coffeescript": ["coffee", "litcoffee"], "text/css": ["css"], "text/csv": ["csv"], "text/html": ["html", "htm", "shtml"], "text/jade": ["jade"], "text/jsx": ["jsx"], "text/less": ["less"], "text/markdown": ["markdown", "md"], "text/mathml": ["mml"], "text/mdx": ["mdx"], "text/n3": ["n3"], "text/plain": ["txt", "text", "conf", "def", "list", "log", "in", "ini"], "text/richtext": ["rtx"], "text/rtf": ["*rtf"], "text/sgml": ["sgml", "sgm"], "text/shex": ["shex"], "text/slim": ["slim", "slm"], "text/spdx": ["spdx"], "text/stylus": ["stylus", "styl"], "text/tab-separated-values": ["tsv"], "text/troff": ["t", "tr", "roff", "man", "me", "ms"], "text/turtle": ["ttl"], "text/uri-list": ["uri", "uris", "urls"], "text/vcard": ["vcard"], "text/vtt": ["vtt"], "text/xml": ["*xml"], "text/yaml": ["yaml", "yml"], "video/3gpp": ["3gp", "3gpp"], "video/3gpp2": ["3g2"], "video/h261": ["h261"], "video/h263": ["h263"], "video/h264": ["h264"], "video/iso.segment": ["m4s"], "video/jpeg": ["jpgv"], "video/jpm": ["*jpm", "jpgm"], "video/mj2": ["mj2", "mjp2"], "video/mp2t": ["ts"], "video/mp4": ["mp4", "mp4v", "mpg4"], "video/mpeg": ["mpeg", "mpg", "mpe", "m1v", "m2v"], "video/ogg": ["ogv"], "video/quicktime": ["qt", "mov"], "video/webm": ["webm"] };
    }
  });
  
  // node_modules/mime/types/other.js
  var require_other = __commonJS({
-   "node_modules/mime/types/other.js"(exports, module) {
-     module.exports = { "application/prs.cww": ["cww"], "application/vnd.1000minds.decision-model+xml": ["1km"], "application/vnd.3gpp.pic-bw-large": ["plb"], "application/vnd.3gpp.pic-bw-small": ["psb"], "application/vnd.3gpp.pic-bw-var": ["pvb"], "application/vnd.3gpp2.tcap": ["tcap"], "application/vnd.3m.post-it-notes": ["pwn"], "application/vnd.accpac.simply.aso": ["aso"], "application/vnd.accpac.simply.imp": ["imp"], "application/vnd.acucobol": ["acu"], "application/vnd.acucorp": ["atc", "acutc"], "application/vnd.adobe.air-application-installer-package+zip": ["air"], "application/vnd.adobe.formscentral.fcdt": ["fcdt"], "application/vnd.adobe.fxp": ["fxp", "fxpl"], "application/vnd.adobe.xdp+xml": ["xdp"], "application/vnd.adobe.xfdf": ["xfdf"], "application/vnd.ahead.space": ["ahead"], "application/vnd.airzip.filesecure.azf": ["azf"], "application/vnd.airzip.filesecure.azs": ["azs"], "application/vnd.amazon.ebook": ["azw"], "application/vnd.americandynamics.acc": ["acc"], "application/vnd.amiga.ami": ["ami"], "application/vnd.android.package-archive": ["apk"], "application/vnd.anser-web-certificate-issue-initiation": ["cii"], "application/vnd.anser-web-funds-transfer-initiation": ["fti"], "application/vnd.antix.game-component": ["atx"], "application/vnd.apple.installer+xml": ["mpkg"], "application/vnd.apple.keynote": ["key"], "application/vnd.apple.mpegurl": ["m3u8"], "application/vnd.apple.numbers": ["numbers"], "application/vnd.apple.pages": ["pages"], "application/vnd.apple.pkpass": ["pkpass"], "application/vnd.aristanetworks.swi": ["swi"], "application/vnd.astraea-software.iota": ["iota"], "application/vnd.audiograph": ["aep"], "application/vnd.balsamiq.bmml+xml": ["bmml"], "application/vnd.blueice.multipass": ["mpm"], "application/vnd.bmi": ["bmi"], "application/vnd.businessobjects": ["rep"], "application/vnd.chemdraw+xml": ["cdxml"], "application/vnd.chipnuts.karaoke-mmd": ["mmd"], "application/vnd.cinderella": ["cdy"], "application/vnd.citationstyles.style+xml": ["csl"], "application/vnd.claymore": ["cla"], "application/vnd.cloanto.rp9": ["rp9"], "application/vnd.clonk.c4group": ["c4g", "c4d", "c4f", "c4p", "c4u"], "application/vnd.cluetrust.cartomobile-config": ["c11amc"], "application/vnd.cluetrust.cartomobile-config-pkg": ["c11amz"], "application/vnd.commonspace": ["csp"], "application/vnd.contact.cmsg": ["cdbcmsg"], "application/vnd.cosmocaller": ["cmc"], "application/vnd.crick.clicker": ["clkx"], "application/vnd.crick.clicker.keyboard": ["clkk"], "application/vnd.crick.clicker.palette": ["clkp"], "application/vnd.crick.clicker.template": ["clkt"], "application/vnd.crick.clicker.wordbank": ["clkw"], "application/vnd.criticaltools.wbs+xml": ["wbs"], "application/vnd.ctc-posml": ["pml"], "application/vnd.cups-ppd": ["ppd"], "application/vnd.curl.car": ["car"], "application/vnd.curl.pcurl": ["pcurl"], "application/vnd.dart": ["dart"], "application/vnd.data-vision.rdz": ["rdz"], "application/vnd.dbf": ["dbf"], "application/vnd.dece.data": ["uvf", "uvvf", "uvd", "uvvd"], "application/vnd.dece.ttml+xml": ["uvt", "uvvt"], "application/vnd.dece.unspecified": ["uvx", "uvvx"], "application/vnd.dece.zip": ["uvz", "uvvz"], "application/vnd.denovo.fcselayout-link": ["fe_launch"], "application/vnd.dna": ["dna"], "application/vnd.dolby.mlp": ["mlp"], "application/vnd.dpgraph": ["dpg"], "application/vnd.dreamfactory": ["dfac"], "application/vnd.ds-keypoint": ["kpxx"], "application/vnd.dvb.ait": ["ait"], "application/vnd.dvb.service": ["svc"], "application/vnd.dynageo": ["geo"], "application/vnd.ecowin.chart": ["mag"], "application/vnd.enliven": ["nml"], "application/vnd.epson.esf": ["esf"], "application/vnd.epson.msf": ["msf"], "application/vnd.epson.quickanime": ["qam"], "application/vnd.epson.salt": ["slt"], "application/vnd.epson.ssf": ["ssf"], "application/vnd.eszigno3+xml": ["es3", "et3"], "application/vnd.ezpix-album": ["ez2"], "application/vnd.ezpix-package": ["ez3"], "application/vnd.fdf": ["fdf"], "application/vnd.fdsn.mseed": ["mseed"], "application/vnd.fdsn.seed": ["seed", "dataless"], "application/vnd.flographit": ["gph"], "application/vnd.fluxtime.clip": ["ftc"], "application/vnd.framemaker": ["fm", "frame", "maker", "book"], "application/vnd.frogans.fnc": ["fnc"], "application/vnd.frogans.ltf": ["ltf"], "application/vnd.fsc.weblaunch": ["fsc"], "application/vnd.fujitsu.oasys": ["oas"], "application/vnd.fujitsu.oasys2": ["oa2"], "application/vnd.fujitsu.oasys3": ["oa3"], "application/vnd.fujitsu.oasysgp": ["fg5"], "application/vnd.fujitsu.oasysprs": ["bh2"], "application/vnd.fujixerox.ddd": ["ddd"], "application/vnd.fujixerox.docuworks": ["xdw"], "application/vnd.fujixerox.docuworks.binder": ["xbd"], "application/vnd.fuzzysheet": ["fzs"], "application/vnd.genomatix.tuxedo": ["txd"], "application/vnd.geogebra.file": ["ggb"], "application/vnd.geogebra.tool": ["ggt"], "application/vnd.geometry-explorer": ["gex", "gre"], "application/vnd.geonext": ["gxt"], "application/vnd.geoplan": ["g2w"], "application/vnd.geospace": ["g3w"], "application/vnd.gmx": ["gmx"], "application/vnd.google-apps.document": ["gdoc"], "application/vnd.google-apps.presentation": ["gslides"], "application/vnd.google-apps.spreadsheet": ["gsheet"], "application/vnd.google-earth.kml+xml": ["kml"], "application/vnd.google-earth.kmz": ["kmz"], "application/vnd.grafeq": ["gqf", "gqs"], "application/vnd.groove-account": ["gac"], "application/vnd.groove-help": ["ghf"], "application/vnd.groove-identity-message": ["gim"], "application/vnd.groove-injector": ["grv"], "application/vnd.groove-tool-message": ["gtm"], "application/vnd.groove-tool-template": ["tpl"], "application/vnd.groove-vcard": ["vcg"], "application/vnd.hal+xml": ["hal"], "application/vnd.handheld-entertainment+xml": ["zmm"], "application/vnd.hbci": ["hbci"], "application/vnd.hhe.lesson-player": ["les"], "application/vnd.hp-hpgl": ["hpgl"], "application/vnd.hp-hpid": ["hpid"], "application/vnd.hp-hps": ["hps"], "application/vnd.hp-jlyt": ["jlt"], "application/vnd.hp-pcl": ["pcl"], "application/vnd.hp-pclxl": ["pclxl"], "application/vnd.hydrostatix.sof-data": ["sfd-hdstx"], "application/vnd.ibm.minipay": ["mpy"], "application/vnd.ibm.modcap": ["afp", "listafp", "list3820"], "application/vnd.ibm.rights-management": ["irm"], "application/vnd.ibm.secure-container": ["sc"], "application/vnd.iccprofile": ["icc", "icm"], "application/vnd.igloader": ["igl"], "application/vnd.immervision-ivp": ["ivp"], "application/vnd.immervision-ivu": ["ivu"], "application/vnd.insors.igm": ["igm"], "application/vnd.intercon.formnet": ["xpw", "xpx"], "application/vnd.intergeo": ["i2g"], "application/vnd.intu.qbo": ["qbo"], "application/vnd.intu.qfx": ["qfx"], "application/vnd.ipunplugged.rcprofile": ["rcprofile"], "application/vnd.irepository.package+xml": ["irp"], "application/vnd.is-xpr": ["xpr"], "application/vnd.isac.fcs": ["fcs"], "application/vnd.jam": ["jam"], "application/vnd.jcp.javame.midlet-rms": ["rms"], "application/vnd.jisp": ["jisp"], "application/vnd.joost.joda-archive": ["joda"], "application/vnd.kahootz": ["ktz", "ktr"], "application/vnd.kde.karbon": ["karbon"], "application/vnd.kde.kchart": ["chrt"], "application/vnd.kde.kformula": ["kfo"], "application/vnd.kde.kivio": ["flw"], "application/vnd.kde.kontour": ["kon"], "application/vnd.kde.kpresenter": ["kpr", "kpt"], "application/vnd.kde.kspread": ["ksp"], "application/vnd.kde.kword": ["kwd", "kwt"], "application/vnd.kenameaapp": ["htke"], "application/vnd.kidspiration": ["kia"], "application/vnd.kinar": ["kne", "knp"], "application/vnd.koan": ["skp", "skd", "skt", "skm"], "application/vnd.kodak-descriptor": ["sse"], "application/vnd.las.las+xml": ["lasxml"], "application/vnd.llamagraphics.life-balance.desktop": ["lbd"], "application/vnd.llamagraphics.life-balance.exchange+xml": ["lbe"], "application/vnd.lotus-1-2-3": ["123"], "application/vnd.lotus-approach": ["apr"], "application/vnd.lotus-freelance": ["pre"], "application/vnd.lotus-notes": ["nsf"], "application/vnd.lotus-organizer": ["org"], "application/vnd.lotus-screencam": ["scm"], "application/vnd.lotus-wordpro": ["lwp"], "application/vnd.macports.portpkg": ["portpkg"], "application/vnd.mapbox-vector-tile": ["mvt"], "application/vnd.mcd": ["mcd"], "application/vnd.medcalcdata": ["mc1"], "application/vnd.mediastation.cdkey": ["cdkey"], "application/vnd.mfer": ["mwf"], "application/vnd.mfmp": ["mfm"], "application/vnd.micrografx.flo": ["flo"], "application/vnd.micrografx.igx": ["igx"], "application/vnd.mif": ["mif"], "application/vnd.mobius.daf": ["daf"], "application/vnd.mobius.dis": ["dis"], "application/vnd.mobius.mbk": ["mbk"], "application/vnd.mobius.mqy": ["mqy"], "application/vnd.mobius.msl": ["msl"], "application/vnd.mobius.plc": ["plc"], "application/vnd.mobius.txf": ["txf"], "application/vnd.mophun.application": ["mpn"], "application/vnd.mophun.certificate": ["mpc"], "application/vnd.mozilla.xul+xml": ["xul"], "application/vnd.ms-artgalry": ["cil"], "application/vnd.ms-cab-compressed": ["cab"], "application/vnd.ms-excel": ["xls", "xlm", "xla", "xlc", "xlt", "xlw"], "application/vnd.ms-excel.addin.macroenabled.12": ["xlam"], "application/vnd.ms-excel.sheet.binary.macroenabled.12": ["xlsb"], "application/vnd.ms-excel.sheet.macroenabled.12": ["xlsm"], "application/vnd.ms-excel.template.macroenabled.12": ["xltm"], "application/vnd.ms-fontobject": ["eot"], "application/vnd.ms-htmlhelp": ["chm"], "application/vnd.ms-ims": ["ims"], "application/vnd.ms-lrm": ["lrm"], "application/vnd.ms-officetheme": ["thmx"], "application/vnd.ms-outlook": ["msg"], "application/vnd.ms-pki.seccat": ["cat"], "application/vnd.ms-pki.stl": ["*stl"], "application/vnd.ms-powerpoint": ["ppt", "pps", "pot"], "application/vnd.ms-powerpoint.addin.macroenabled.12": ["ppam"], "application/vnd.ms-powerpoint.presentation.macroenabled.12": ["pptm"], "application/vnd.ms-powerpoint.slide.macroenabled.12": ["sldm"], "application/vnd.ms-powerpoint.slideshow.macroenabled.12": ["ppsm"], "application/vnd.ms-powerpoint.template.macroenabled.12": ["potm"], "application/vnd.ms-project": ["mpp", "mpt"], "application/vnd.ms-word.document.macroenabled.12": ["docm"], "application/vnd.ms-word.template.macroenabled.12": ["dotm"], "application/vnd.ms-works": ["wps", "wks", "wcm", "wdb"], "application/vnd.ms-wpl": ["wpl"], "application/vnd.ms-xpsdocument": ["xps"], "application/vnd.mseq": ["mseq"], "application/vnd.musician": ["mus"], "application/vnd.muvee.style": ["msty"], "application/vnd.mynfc": ["taglet"], "application/vnd.neurolanguage.nlu": ["nlu"], "application/vnd.nitf": ["ntf", "nitf"], "application/vnd.noblenet-directory": ["nnd"], "application/vnd.noblenet-sealer": ["nns"], "application/vnd.noblenet-web": ["nnw"], "application/vnd.nokia.n-gage.ac+xml": ["*ac"], "application/vnd.nokia.n-gage.data": ["ngdat"], "application/vnd.nokia.n-gage.symbian.install": ["n-gage"], "application/vnd.nokia.radio-preset": ["rpst"], "application/vnd.nokia.radio-presets": ["rpss"], "application/vnd.novadigm.edm": ["edm"], "application/vnd.novadigm.edx": ["edx"], "application/vnd.novadigm.ext": ["ext"], "application/vnd.oasis.opendocument.chart": ["odc"], "application/vnd.oasis.opendocument.chart-template": ["otc"], "application/vnd.oasis.opendocument.database": ["odb"], "application/vnd.oasis.opendocument.formula": ["odf"], "application/vnd.oasis.opendocument.formula-template": ["odft"], "application/vnd.oasis.opendocument.graphics": ["odg"], "application/vnd.oasis.opendocument.graphics-template": ["otg"], "application/vnd.oasis.opendocument.image": ["odi"], "application/vnd.oasis.opendocument.image-template": ["oti"], "application/vnd.oasis.opendocument.presentation": ["odp"], "application/vnd.oasis.opendocument.presentation-template": ["otp"], "application/vnd.oasis.opendocument.spreadsheet": ["ods"], "application/vnd.oasis.opendocument.spreadsheet-template": ["ots"], "application/vnd.oasis.opendocument.text": ["odt"], "application/vnd.oasis.opendocument.text-master": ["odm"], "application/vnd.oasis.opendocument.text-template": ["ott"], "application/vnd.oasis.opendocument.text-web": ["oth"], "application/vnd.olpc-sugar": ["xo"], "application/vnd.oma.dd2+xml": ["dd2"], "application/vnd.openblox.game+xml": ["obgx"], "application/vnd.openofficeorg.extension": ["oxt"], "application/vnd.openstreetmap.data+xml": ["osm"], "application/vnd.openxmlformats-officedocument.presentationml.presentation": ["pptx"], "application/vnd.openxmlformats-officedocument.presentationml.slide": ["sldx"], "application/vnd.openxmlformats-officedocument.presentationml.slideshow": ["ppsx"], "application/vnd.openxmlformats-officedocument.presentationml.template": ["potx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.template": ["xltx"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"], "application/vnd.openxmlformats-officedocument.wordprocessingml.template": ["dotx"], "application/vnd.osgeo.mapguide.package": ["mgp"], "application/vnd.osgi.dp": ["dp"], "application/vnd.osgi.subsystem": ["esa"], "application/vnd.palm": ["pdb", "pqa", "oprc"], "application/vnd.pawaafile": ["paw"], "application/vnd.pg.format": ["str"], "application/vnd.pg.osasli": ["ei6"], "application/vnd.picsel": ["efif"], "application/vnd.pmi.widget": ["wg"], "application/vnd.pocketlearn": ["plf"], "application/vnd.powerbuilder6": ["pbd"], "application/vnd.previewsystems.box": ["box"], "application/vnd.proteus.magazine": ["mgz"], "application/vnd.publishare-delta-tree": ["qps"], "application/vnd.pvi.ptid1": ["ptid"], "application/vnd.quark.quarkxpress": ["qxd", "qxt", "qwd", "qwt", "qxl", "qxb"], "application/vnd.rar": ["rar"], "application/vnd.realvnc.bed": ["bed"], "application/vnd.recordare.musicxml": ["mxl"], "application/vnd.recordare.musicxml+xml": ["musicxml"], "application/vnd.rig.cryptonote": ["cryptonote"], "application/vnd.rim.cod": ["cod"], "application/vnd.rn-realmedia": ["rm"], "application/vnd.rn-realmedia-vbr": ["rmvb"], "application/vnd.route66.link66+xml": ["link66"], "application/vnd.sailingtracker.track": ["st"], "application/vnd.seemail": ["see"], "application/vnd.sema": ["sema"], "application/vnd.semd": ["semd"], "application/vnd.semf": ["semf"], "application/vnd.shana.informed.formdata": ["ifm"], "application/vnd.shana.informed.formtemplate": ["itp"], "application/vnd.shana.informed.interchange": ["iif"], "application/vnd.shana.informed.package": ["ipk"], "application/vnd.simtech-mindmapper": ["twd", "twds"], "application/vnd.smaf": ["mmf"], "application/vnd.smart.teacher": ["teacher"], "application/vnd.software602.filler.form+xml": ["fo"], "application/vnd.solent.sdkm+xml": ["sdkm", "sdkd"], "application/vnd.spotfire.dxp": ["dxp"], "application/vnd.spotfire.sfs": ["sfs"], "application/vnd.stardivision.calc": ["sdc"], "application/vnd.stardivision.draw": ["sda"], "application/vnd.stardivision.impress": ["sdd"], "application/vnd.stardivision.math": ["smf"], "application/vnd.stardivision.writer": ["sdw", "vor"], "application/vnd.stardivision.writer-global": ["sgl"], "application/vnd.stepmania.package": ["smzip"], "application/vnd.stepmania.stepchart": ["sm"], "application/vnd.sun.wadl+xml": ["wadl"], "application/vnd.sun.xml.calc": ["sxc"], "application/vnd.sun.xml.calc.template": ["stc"], "application/vnd.sun.xml.draw": ["sxd"], "application/vnd.sun.xml.draw.template": ["std"], "application/vnd.sun.xml.impress": ["sxi"], "application/vnd.sun.xml.impress.template": ["sti"], "application/vnd.sun.xml.math": ["sxm"], "application/vnd.sun.xml.writer": ["sxw"], "application/vnd.sun.xml.writer.global": ["sxg"], "application/vnd.sun.xml.writer.template": ["stw"], "application/vnd.sus-calendar": ["sus", "susp"], "application/vnd.svd": ["svd"], "application/vnd.symbian.install": ["sis", "sisx"], "application/vnd.syncml+xml": ["xsm"], "application/vnd.syncml.dm+wbxml": ["bdm"], "application/vnd.syncml.dm+xml": ["xdm"], "application/vnd.syncml.dmddf+xml": ["ddf"], "application/vnd.tao.intent-module-archive": ["tao"], "application/vnd.tcpdump.pcap": ["pcap", "cap", "dmp"], "application/vnd.tmobile-livetv": ["tmo"], "application/vnd.trid.tpt": ["tpt"], "application/vnd.triscape.mxs": ["mxs"], "application/vnd.trueapp": ["tra"], "application/vnd.ufdl": ["ufd", "ufdl"], "application/vnd.uiq.theme": ["utz"], "application/vnd.umajin": ["umj"], "application/vnd.unity": ["unityweb"], "application/vnd.uoml+xml": ["uoml"], "application/vnd.vcx": ["vcx"], "application/vnd.visio": ["vsd", "vst", "vss", "vsw"], "application/vnd.visionary": ["vis"], "application/vnd.vsf": ["vsf"], "application/vnd.wap.wbxml": ["wbxml"], "application/vnd.wap.wmlc": ["wmlc"], "application/vnd.wap.wmlscriptc": ["wmlsc"], "application/vnd.webturbo": ["wtb"], "application/vnd.wolfram.player": ["nbp"], "application/vnd.wordperfect": ["wpd"], "application/vnd.wqd": ["wqd"], "application/vnd.wt.stf": ["stf"], "application/vnd.xara": ["xar"], "application/vnd.xfdl": ["xfdl"], "application/vnd.yamaha.hv-dic": ["hvd"], "application/vnd.yamaha.hv-script": ["hvs"], "application/vnd.yamaha.hv-voice": ["hvp"], "application/vnd.yamaha.openscoreformat": ["osf"], "application/vnd.yamaha.openscoreformat.osfpvg+xml": ["osfpvg"], "application/vnd.yamaha.smaf-audio": ["saf"], "application/vnd.yamaha.smaf-phrase": ["spf"], "application/vnd.yellowriver-custom-menu": ["cmp"], "application/vnd.zul": ["zir", "zirz"], "application/vnd.zzazz.deck+xml": ["zaz"], "application/x-7z-compressed": ["7z"], "application/x-abiword": ["abw"], "application/x-ace-compressed": ["ace"], "application/x-apple-diskimage": ["*dmg"], "application/x-arj": ["arj"], "application/x-authorware-bin": ["aab", "x32", "u32", "vox"], "application/x-authorware-map": ["aam"], "application/x-authorware-seg": ["aas"], "application/x-bcpio": ["bcpio"], "application/x-bdoc": ["*bdoc"], "application/x-bittorrent": ["torrent"], "application/x-blorb": ["blb", "blorb"], "application/x-bzip": ["bz"], "application/x-bzip2": ["bz2", "boz"], "application/x-cbr": ["cbr", "cba", "cbt", "cbz", "cb7"], "application/x-cdlink": ["vcd"], "application/x-cfs-compressed": ["cfs"], "application/x-chat": ["chat"], "application/x-chess-pgn": ["pgn"], "application/x-chrome-extension": ["crx"], "application/x-cocoa": ["cco"], "application/x-conference": ["nsc"], "application/x-cpio": ["cpio"], "application/x-csh": ["csh"], "application/x-debian-package": ["*deb", "udeb"], "application/x-dgc-compressed": ["dgc"], "application/x-director": ["dir", "dcr", "dxr", "cst", "cct", "cxt", "w3d", "fgd", "swa"], "application/x-doom": ["wad"], "application/x-dtbncx+xml": ["ncx"], "application/x-dtbook+xml": ["dtb"], "application/x-dtbresource+xml": ["res"], "application/x-dvi": ["dvi"], "application/x-envoy": ["evy"], "application/x-eva": ["eva"], "application/x-font-bdf": ["bdf"], "application/x-font-ghostscript": ["gsf"], "application/x-font-linux-psf": ["psf"], "application/x-font-pcf": ["pcf"], "application/x-font-snf": ["snf"], "application/x-font-type1": ["pfa", "pfb", "pfm", "afm"], "application/x-freearc": ["arc"], "application/x-futuresplash": ["spl"], "application/x-gca-compressed": ["gca"], "application/x-glulx": ["ulx"], "application/x-gnumeric": ["gnumeric"], "application/x-gramps-xml": ["gramps"], "application/x-gtar": ["gtar"], "application/x-hdf": ["hdf"], "application/x-httpd-php": ["php"], "application/x-install-instructions": ["install"], "application/x-iso9660-image": ["*iso"], "application/x-iwork-keynote-sffkey": ["*key"], "application/x-iwork-numbers-sffnumbers": ["*numbers"], "application/x-iwork-pages-sffpages": ["*pages"], "application/x-java-archive-diff": ["jardiff"], "application/x-java-jnlp-file": ["jnlp"], "application/x-keepass2": ["kdbx"], "application/x-latex": ["latex"], "application/x-lua-bytecode": ["luac"], "application/x-lzh-compressed": ["lzh", "lha"], "application/x-makeself": ["run"], "application/x-mie": ["mie"], "application/x-mobipocket-ebook": ["prc", "mobi"], "application/x-ms-application": ["application"], "application/x-ms-shortcut": ["lnk"], "application/x-ms-wmd": ["wmd"], "application/x-ms-wmz": ["wmz"], "application/x-ms-xbap": ["xbap"], "application/x-msaccess": ["mdb"], "application/x-msbinder": ["obd"], "application/x-mscardfile": ["crd"], "application/x-msclip": ["clp"], "application/x-msdos-program": ["*exe"], "application/x-msdownload": ["*exe", "*dll", "com", "bat", "*msi"], "application/x-msmediaview": ["mvb", "m13", "m14"], "application/x-msmetafile": ["*wmf", "*wmz", "*emf", "emz"], "application/x-msmoney": ["mny"], "application/x-mspublisher": ["pub"], "application/x-msschedule": ["scd"], "application/x-msterminal": ["trm"], "application/x-mswrite": ["wri"], "application/x-netcdf": ["nc", "cdf"], "application/x-ns-proxy-autoconfig": ["pac"], "application/x-nzb": ["nzb"], "application/x-perl": ["pl", "pm"], "application/x-pilot": ["*prc", "*pdb"], "application/x-pkcs12": ["p12", "pfx"], "application/x-pkcs7-certificates": ["p7b", "spc"], "application/x-pkcs7-certreqresp": ["p7r"], "application/x-rar-compressed": ["*rar"], "application/x-redhat-package-manager": ["rpm"], "application/x-research-info-systems": ["ris"], "application/x-sea": ["sea"], "application/x-sh": ["sh"], "application/x-shar": ["shar"], "application/x-shockwave-flash": ["swf"], "application/x-silverlight-app": ["xap"], "application/x-sql": ["sql"], "application/x-stuffit": ["sit"], "application/x-stuffitx": ["sitx"], "application/x-subrip": ["srt"], "application/x-sv4cpio": ["sv4cpio"], "application/x-sv4crc": ["sv4crc"], "application/x-t3vm-image": ["t3"], "application/x-tads": ["gam"], "application/x-tar": ["tar"], "application/x-tcl": ["tcl", "tk"], "application/x-tex": ["tex"], "application/x-tex-tfm": ["tfm"], "application/x-texinfo": ["texinfo", "texi"], "application/x-tgif": ["*obj"], "application/x-ustar": ["ustar"], "application/x-virtualbox-hdd": ["hdd"], "application/x-virtualbox-ova": ["ova"], "application/x-virtualbox-ovf": ["ovf"], "application/x-virtualbox-vbox": ["vbox"], "application/x-virtualbox-vbox-extpack": ["vbox-extpack"], "application/x-virtualbox-vdi": ["vdi"], "application/x-virtualbox-vhd": ["vhd"], "application/x-virtualbox-vmdk": ["vmdk"], "application/x-wais-source": ["src"], "application/x-web-app-manifest+json": ["webapp"], "application/x-x509-ca-cert": ["der", "crt", "pem"], "application/x-xfig": ["fig"], "application/x-xliff+xml": ["*xlf"], "application/x-xpinstall": ["xpi"], "application/x-xz": ["xz"], "application/x-zmachine": ["z1", "z2", "z3", "z4", "z5", "z6", "z7", "z8"], "audio/vnd.dece.audio": ["uva", "uvva"], "audio/vnd.digital-winds": ["eol"], "audio/vnd.dra": ["dra"], "audio/vnd.dts": ["dts"], "audio/vnd.dts.hd": ["dtshd"], "audio/vnd.lucent.voice": ["lvp"], "audio/vnd.ms-playready.media.pya": ["pya"], "audio/vnd.nuera.ecelp4800": ["ecelp4800"], "audio/vnd.nuera.ecelp7470": ["ecelp7470"], "audio/vnd.nuera.ecelp9600": ["ecelp9600"], "audio/vnd.rip": ["rip"], "audio/x-aac": ["aac"], "audio/x-aiff": ["aif", "aiff", "aifc"], "audio/x-caf": ["caf"], "audio/x-flac": ["flac"], "audio/x-m4a": ["*m4a"], "audio/x-matroska": ["mka"], "audio/x-mpegurl": ["m3u"], "audio/x-ms-wax": ["wax"], "audio/x-ms-wma": ["wma"], "audio/x-pn-realaudio": ["ram", "ra"], "audio/x-pn-realaudio-plugin": ["rmp"], "audio/x-realaudio": ["*ra"], "audio/x-wav": ["*wav"], "chemical/x-cdx": ["cdx"], "chemical/x-cif": ["cif"], "chemical/x-cmdf": ["cmdf"], "chemical/x-cml": ["cml"], "chemical/x-csml": ["csml"], "chemical/x-xyz": ["xyz"], "image/prs.btif": ["btif"], "image/prs.pti": ["pti"], "image/vnd.adobe.photoshop": ["psd"], "image/vnd.airzip.accelerator.azv": ["azv"], "image/vnd.dece.graphic": ["uvi", "uvvi", "uvg", "uvvg"], "image/vnd.djvu": ["djvu", "djv"], "image/vnd.dvb.subtitle": ["*sub"], "image/vnd.dwg": ["dwg"], "image/vnd.dxf": ["dxf"], "image/vnd.fastbidsheet": ["fbs"], "image/vnd.fpx": ["fpx"], "image/vnd.fst": ["fst"], "image/vnd.fujixerox.edmics-mmr": ["mmr"], "image/vnd.fujixerox.edmics-rlc": ["rlc"], "image/vnd.microsoft.icon": ["ico"], "image/vnd.ms-dds": ["dds"], "image/vnd.ms-modi": ["mdi"], "image/vnd.ms-photo": ["wdp"], "image/vnd.net-fpx": ["npx"], "image/vnd.pco.b16": ["b16"], "image/vnd.tencent.tap": ["tap"], "image/vnd.valve.source.texture": ["vtf"], "image/vnd.wap.wbmp": ["wbmp"], "image/vnd.xiff": ["xif"], "image/vnd.zbrush.pcx": ["pcx"], "image/x-3ds": ["3ds"], "image/x-cmu-raster": ["ras"], "image/x-cmx": ["cmx"], "image/x-freehand": ["fh", "fhc", "fh4", "fh5", "fh7"], "image/x-icon": ["*ico"], "image/x-jng": ["jng"], "image/x-mrsid-image": ["sid"], "image/x-ms-bmp": ["*bmp"], "image/x-pcx": ["*pcx"], "image/x-pict": ["pic", "pct"], "image/x-portable-anymap": ["pnm"], "image/x-portable-bitmap": ["pbm"], "image/x-portable-graymap": ["pgm"], "image/x-portable-pixmap": ["ppm"], "image/x-rgb": ["rgb"], "image/x-tga": ["tga"], "image/x-xbitmap": ["xbm"], "image/x-xpixmap": ["xpm"], "image/x-xwindowdump": ["xwd"], "message/vnd.wfa.wsc": ["wsc"], "model/vnd.collada+xml": ["dae"], "model/vnd.dwf": ["dwf"], "model/vnd.gdl": ["gdl"], "model/vnd.gtw": ["gtw"], "model/vnd.mts": ["mts"], "model/vnd.opengex": ["ogex"], "model/vnd.parasolid.transmit.binary": ["x_b"], "model/vnd.parasolid.transmit.text": ["x_t"], "model/vnd.sap.vds": ["vds"], "model/vnd.usdz+zip": ["usdz"], "model/vnd.valve.source.compiled-map": ["bsp"], "model/vnd.vtu": ["vtu"], "text/prs.lines.tag": ["dsc"], "text/vnd.curl": ["curl"], "text/vnd.curl.dcurl": ["dcurl"], "text/vnd.curl.mcurl": ["mcurl"], "text/vnd.curl.scurl": ["scurl"], "text/vnd.dvb.subtitle": ["sub"], "text/vnd.fly": ["fly"], "text/vnd.fmi.flexstor": ["flx"], "text/vnd.graphviz": ["gv"], "text/vnd.in3d.3dml": ["3dml"], "text/vnd.in3d.spot": ["spot"], "text/vnd.sun.j2me.app-descriptor": ["jad"], "text/vnd.wap.wml": ["wml"], "text/vnd.wap.wmlscript": ["wmls"], "text/x-asm": ["s", "asm"], "text/x-c": ["c", "cc", "cxx", "cpp", "h", "hh", "dic"], "text/x-component": ["htc"], "text/x-fortran": ["f", "for", "f77", "f90"], "text/x-handlebars-template": ["hbs"], "text/x-java-source": ["java"], "text/x-lua": ["lua"], "text/x-markdown": ["mkd"], "text/x-nfo": ["nfo"], "text/x-opml": ["opml"], "text/x-org": ["*org"], "text/x-pascal": ["p", "pas"], "text/x-processing": ["pde"], "text/x-sass": ["sass"], "text/x-scss": ["scss"], "text/x-setext": ["etx"], "text/x-sfv": ["sfv"], "text/x-suse-ymp": ["ymp"], "text/x-uuencode": ["uu"], "text/x-vcalendar": ["vcs"], "text/x-vcard": ["vcf"], "video/vnd.dece.hd": ["uvh", "uvvh"], "video/vnd.dece.mobile": ["uvm", "uvvm"], "video/vnd.dece.pd": ["uvp", "uvvp"], "video/vnd.dece.sd": ["uvs", "uvvs"], "video/vnd.dece.video": ["uvv", "uvvv"], "video/vnd.dvb.file": ["dvb"], "video/vnd.fvt": ["fvt"], "video/vnd.mpegurl": ["mxu", "m4u"], "video/vnd.ms-playready.media.pyv": ["pyv"], "video/vnd.uvvu.mp4": ["uvu", "uvvu"], "video/vnd.vivo": ["viv"], "video/x-f4v": ["f4v"], "video/x-fli": ["fli"], "video/x-flv": ["flv"], "video/x-m4v": ["m4v"], "video/x-matroska": ["mkv", "mk3d", "mks"], "video/x-mng": ["mng"], "video/x-ms-asf": ["asf", "asx"], "video/x-ms-vob": ["vob"], "video/x-ms-wm": ["wm"], "video/x-ms-wmv": ["wmv"], "video/x-ms-wmx": ["wmx"], "video/x-ms-wvx": ["wvx"], "video/x-msvideo": ["avi"], "video/x-sgi-movie": ["movie"], "video/x-smv": ["smv"], "x-conference/x-cooltalk": ["ice"] };
+   "node_modules/mime/types/other.js"(exports, module2) {
+     module2.exports = { "application/prs.cww": ["cww"], "application/vnd.1000minds.decision-model+xml": ["1km"], "application/vnd.3gpp.pic-bw-large": ["plb"], "application/vnd.3gpp.pic-bw-small": ["psb"], "application/vnd.3gpp.pic-bw-var": ["pvb"], "application/vnd.3gpp2.tcap": ["tcap"], "application/vnd.3m.post-it-notes": ["pwn"], "application/vnd.accpac.simply.aso": ["aso"], "application/vnd.accpac.simply.imp": ["imp"], "application/vnd.acucobol": ["acu"], "application/vnd.acucorp": ["atc", "acutc"], "application/vnd.adobe.air-application-installer-package+zip": ["air"], "application/vnd.adobe.formscentral.fcdt": ["fcdt"], "application/vnd.adobe.fxp": ["fxp", "fxpl"], "application/vnd.adobe.xdp+xml": ["xdp"], "application/vnd.adobe.xfdf": ["xfdf"], "application/vnd.ahead.space": ["ahead"], "application/vnd.airzip.filesecure.azf": ["azf"], "application/vnd.airzip.filesecure.azs": ["azs"], "application/vnd.amazon.ebook": ["azw"], "application/vnd.americandynamics.acc": ["acc"], "application/vnd.amiga.ami": ["ami"], "application/vnd.android.package-archive": ["apk"], "application/vnd.anser-web-certificate-issue-initiation": ["cii"], "application/vnd.anser-web-funds-transfer-initiation": ["fti"], "application/vnd.antix.game-component": ["atx"], "application/vnd.apple.installer+xml": ["mpkg"], "application/vnd.apple.keynote": ["key"], "application/vnd.apple.mpegurl": ["m3u8"], "application/vnd.apple.numbers": ["numbers"], "application/vnd.apple.pages": ["pages"], "application/vnd.apple.pkpass": ["pkpass"], "application/vnd.aristanetworks.swi": ["swi"], "application/vnd.astraea-software.iota": ["iota"], "application/vnd.audiograph": ["aep"], "application/vnd.balsamiq.bmml+xml": ["bmml"], "application/vnd.blueice.multipass": ["mpm"], "application/vnd.bmi": ["bmi"], "application/vnd.businessobjects": ["rep"], "application/vnd.chemdraw+xml": ["cdxml"], "application/vnd.chipnuts.karaoke-mmd": ["mmd"], "application/vnd.cinderella": ["cdy"], "application/vnd.citationstyles.style+xml": ["csl"], "application/vnd.claymore": ["cla"], "application/vnd.cloanto.rp9": ["rp9"], "application/vnd.clonk.c4group": ["c4g", "c4d", "c4f", "c4p", "c4u"], "application/vnd.cluetrust.cartomobile-config": ["c11amc"], "application/vnd.cluetrust.cartomobile-config-pkg": ["c11amz"], "application/vnd.commonspace": ["csp"], "application/vnd.contact.cmsg": ["cdbcmsg"], "application/vnd.cosmocaller": ["cmc"], "application/vnd.crick.clicker": ["clkx"], "application/vnd.crick.clicker.keyboard": ["clkk"], "application/vnd.crick.clicker.palette": ["clkp"], "application/vnd.crick.clicker.template": ["clkt"], "application/vnd.crick.clicker.wordbank": ["clkw"], "application/vnd.criticaltools.wbs+xml": ["wbs"], "application/vnd.ctc-posml": ["pml"], "application/vnd.cups-ppd": ["ppd"], "application/vnd.curl.car": ["car"], "application/vnd.curl.pcurl": ["pcurl"], "application/vnd.dart": ["dart"], "application/vnd.data-vision.rdz": ["rdz"], "application/vnd.dbf": ["dbf"], "application/vnd.dece.data": ["uvf", "uvvf", "uvd", "uvvd"], "application/vnd.dece.ttml+xml": ["uvt", "uvvt"], "application/vnd.dece.unspecified": ["uvx", "uvvx"], "application/vnd.dece.zip": ["uvz", "uvvz"], "application/vnd.denovo.fcselayout-link": ["fe_launch"], "application/vnd.dna": ["dna"], "application/vnd.dolby.mlp": ["mlp"], "application/vnd.dpgraph": ["dpg"], "application/vnd.dreamfactory": ["dfac"], "application/vnd.ds-keypoint": ["kpxx"], "application/vnd.dvb.ait": ["ait"], "application/vnd.dvb.service": ["svc"], "application/vnd.dynageo": ["geo"], "application/vnd.ecowin.chart": ["mag"], "application/vnd.enliven": ["nml"], "application/vnd.epson.esf": ["esf"], "application/vnd.epson.msf": ["msf"], "application/vnd.epson.quickanime": ["qam"], "application/vnd.epson.salt": ["slt"], "application/vnd.epson.ssf": ["ssf"], "application/vnd.eszigno3+xml": ["es3", "et3"], "application/vnd.ezpix-album": ["ez2"], "application/vnd.ezpix-package": ["ez3"], "application/vnd.fdf": ["fdf"], "application/vnd.fdsn.mseed": ["mseed"], "application/vnd.fdsn.seed": ["seed", "dataless"], "application/vnd.flographit": ["gph"], "application/vnd.fluxtime.clip": ["ftc"], "application/vnd.framemaker": ["fm", "frame", "maker", "book"], "application/vnd.frogans.fnc": ["fnc"], "application/vnd.frogans.ltf": ["ltf"], "application/vnd.fsc.weblaunch": ["fsc"], "application/vnd.fujitsu.oasys": ["oas"], "application/vnd.fujitsu.oasys2": ["oa2"], "application/vnd.fujitsu.oasys3": ["oa3"], "application/vnd.fujitsu.oasysgp": ["fg5"], "application/vnd.fujitsu.oasysprs": ["bh2"], "application/vnd.fujixerox.ddd": ["ddd"], "application/vnd.fujixerox.docuworks": ["xdw"], "application/vnd.fujixerox.docuworks.binder": ["xbd"], "application/vnd.fuzzysheet": ["fzs"], "application/vnd.genomatix.tuxedo": ["txd"], "application/vnd.geogebra.file": ["ggb"], "application/vnd.geogebra.tool": ["ggt"], "application/vnd.geometry-explorer": ["gex", "gre"], "application/vnd.geonext": ["gxt"], "application/vnd.geoplan": ["g2w"], "application/vnd.geospace": ["g3w"], "application/vnd.gmx": ["gmx"], "application/vnd.google-apps.document": ["gdoc"], "application/vnd.google-apps.presentation": ["gslides"], "application/vnd.google-apps.spreadsheet": ["gsheet"], "application/vnd.google-earth.kml+xml": ["kml"], "application/vnd.google-earth.kmz": ["kmz"], "application/vnd.grafeq": ["gqf", "gqs"], "application/vnd.groove-account": ["gac"], "application/vnd.groove-help": ["ghf"], "application/vnd.groove-identity-message": ["gim"], "application/vnd.groove-injector": ["grv"], "application/vnd.groove-tool-message": ["gtm"], "application/vnd.groove-tool-template": ["tpl"], "application/vnd.groove-vcard": ["vcg"], "application/vnd.hal+xml": ["hal"], "application/vnd.handheld-entertainment+xml": ["zmm"], "application/vnd.hbci": ["hbci"], "application/vnd.hhe.lesson-player": ["les"], "application/vnd.hp-hpgl": ["hpgl"], "application/vnd.hp-hpid": ["hpid"], "application/vnd.hp-hps": ["hps"], "application/vnd.hp-jlyt": ["jlt"], "application/vnd.hp-pcl": ["pcl"], "application/vnd.hp-pclxl": ["pclxl"], "application/vnd.hydrostatix.sof-data": ["sfd-hdstx"], "application/vnd.ibm.minipay": ["mpy"], "application/vnd.ibm.modcap": ["afp", "listafp", "list3820"], "application/vnd.ibm.rights-management": ["irm"], "application/vnd.ibm.secure-container": ["sc"], "application/vnd.iccprofile": ["icc", "icm"], "application/vnd.igloader": ["igl"], "application/vnd.immervision-ivp": ["ivp"], "application/vnd.immervision-ivu": ["ivu"], "application/vnd.insors.igm": ["igm"], "application/vnd.intercon.formnet": ["xpw", "xpx"], "application/vnd.intergeo": ["i2g"], "application/vnd.intu.qbo": ["qbo"], "application/vnd.intu.qfx": ["qfx"], "application/vnd.ipunplugged.rcprofile": ["rcprofile"], "application/vnd.irepository.package+xml": ["irp"], "application/vnd.is-xpr": ["xpr"], "application/vnd.isac.fcs": ["fcs"], "application/vnd.jam": ["jam"], "application/vnd.jcp.javame.midlet-rms": ["rms"], "application/vnd.jisp": ["jisp"], "application/vnd.joost.joda-archive": ["joda"], "application/vnd.kahootz": ["ktz", "ktr"], "application/vnd.kde.karbon": ["karbon"], "application/vnd.kde.kchart": ["chrt"], "application/vnd.kde.kformula": ["kfo"], "application/vnd.kde.kivio": ["flw"], "application/vnd.kde.kontour": ["kon"], "application/vnd.kde.kpresenter": ["kpr", "kpt"], "application/vnd.kde.kspread": ["ksp"], "application/vnd.kde.kword": ["kwd", "kwt"], "application/vnd.kenameaapp": ["htke"], "application/vnd.kidspiration": ["kia"], "application/vnd.kinar": ["kne", "knp"], "application/vnd.koan": ["skp", "skd", "skt", "skm"], "application/vnd.kodak-descriptor": ["sse"], "application/vnd.las.las+xml": ["lasxml"], "application/vnd.llamagraphics.life-balance.desktop": ["lbd"], "application/vnd.llamagraphics.life-balance.exchange+xml": ["lbe"], "application/vnd.lotus-1-2-3": ["123"], "application/vnd.lotus-approach": ["apr"], "application/vnd.lotus-freelance": ["pre"], "application/vnd.lotus-notes": ["nsf"], "application/vnd.lotus-organizer": ["org"], "application/vnd.lotus-screencam": ["scm"], "application/vnd.lotus-wordpro": ["lwp"], "application/vnd.macports.portpkg": ["portpkg"], "application/vnd.mapbox-vector-tile": ["mvt"], "application/vnd.mcd": ["mcd"], "application/vnd.medcalcdata": ["mc1"], "application/vnd.mediastation.cdkey": ["cdkey"], "application/vnd.mfer": ["mwf"], "application/vnd.mfmp": ["mfm"], "application/vnd.micrografx.flo": ["flo"], "application/vnd.micrografx.igx": ["igx"], "application/vnd.mif": ["mif"], "application/vnd.mobius.daf": ["daf"], "application/vnd.mobius.dis": ["dis"], "application/vnd.mobius.mbk": ["mbk"], "application/vnd.mobius.mqy": ["mqy"], "application/vnd.mobius.msl": ["msl"], "application/vnd.mobius.plc": ["plc"], "application/vnd.mobius.txf": ["txf"], "application/vnd.mophun.application": ["mpn"], "application/vnd.mophun.certificate": ["mpc"], "application/vnd.mozilla.xul+xml": ["xul"], "application/vnd.ms-artgalry": ["cil"], "application/vnd.ms-cab-compressed": ["cab"], "application/vnd.ms-excel": ["xls", "xlm", "xla", "xlc", "xlt", "xlw"], "application/vnd.ms-excel.addin.macroenabled.12": ["xlam"], "application/vnd.ms-excel.sheet.binary.macroenabled.12": ["xlsb"], "application/vnd.ms-excel.sheet.macroenabled.12": ["xlsm"], "application/vnd.ms-excel.template.macroenabled.12": ["xltm"], "application/vnd.ms-fontobject": ["eot"], "application/vnd.ms-htmlhelp": ["chm"], "application/vnd.ms-ims": ["ims"], "application/vnd.ms-lrm": ["lrm"], "application/vnd.ms-officetheme": ["thmx"], "application/vnd.ms-outlook": ["msg"], "application/vnd.ms-pki.seccat": ["cat"], "application/vnd.ms-pki.stl": ["*stl"], "application/vnd.ms-powerpoint": ["ppt", "pps", "pot"], "application/vnd.ms-powerpoint.addin.macroenabled.12": ["ppam"], "application/vnd.ms-powerpoint.presentation.macroenabled.12": ["pptm"], "application/vnd.ms-powerpoint.slide.macroenabled.12": ["sldm"], "application/vnd.ms-powerpoint.slideshow.macroenabled.12": ["ppsm"], "application/vnd.ms-powerpoint.template.macroenabled.12": ["potm"], "application/vnd.ms-project": ["mpp", "mpt"], "application/vnd.ms-word.document.macroenabled.12": ["docm"], "application/vnd.ms-word.template.macroenabled.12": ["dotm"], "application/vnd.ms-works": ["wps", "wks", "wcm", "wdb"], "application/vnd.ms-wpl": ["wpl"], "application/vnd.ms-xpsdocument": ["xps"], "application/vnd.mseq": ["mseq"], "application/vnd.musician": ["mus"], "application/vnd.muvee.style": ["msty"], "application/vnd.mynfc": ["taglet"], "application/vnd.neurolanguage.nlu": ["nlu"], "application/vnd.nitf": ["ntf", "nitf"], "application/vnd.noblenet-directory": ["nnd"], "application/vnd.noblenet-sealer": ["nns"], "application/vnd.noblenet-web": ["nnw"], "application/vnd.nokia.n-gage.ac+xml": ["*ac"], "application/vnd.nokia.n-gage.data": ["ngdat"], "application/vnd.nokia.n-gage.symbian.install": ["n-gage"], "application/vnd.nokia.radio-preset": ["rpst"], "application/vnd.nokia.radio-presets": ["rpss"], "application/vnd.novadigm.edm": ["edm"], "application/vnd.novadigm.edx": ["edx"], "application/vnd.novadigm.ext": ["ext"], "application/vnd.oasis.opendocument.chart": ["odc"], "application/vnd.oasis.opendocument.chart-template": ["otc"], "application/vnd.oasis.opendocument.database": ["odb"], "application/vnd.oasis.opendocument.formula": ["odf"], "application/vnd.oasis.opendocument.formula-template": ["odft"], "application/vnd.oasis.opendocument.graphics": ["odg"], "application/vnd.oasis.opendocument.graphics-template": ["otg"], "application/vnd.oasis.opendocument.image": ["odi"], "application/vnd.oasis.opendocument.image-template": ["oti"], "application/vnd.oasis.opendocument.presentation": ["odp"], "application/vnd.oasis.opendocument.presentation-template": ["otp"], "application/vnd.oasis.opendocument.spreadsheet": ["ods"], "application/vnd.oasis.opendocument.spreadsheet-template": ["ots"], "application/vnd.oasis.opendocument.text": ["odt"], "application/vnd.oasis.opendocument.text-master": ["odm"], "application/vnd.oasis.opendocument.text-template": ["ott"], "application/vnd.oasis.opendocument.text-web": ["oth"], "application/vnd.olpc-sugar": ["xo"], "application/vnd.oma.dd2+xml": ["dd2"], "application/vnd.openblox.game+xml": ["obgx"], "application/vnd.openofficeorg.extension": ["oxt"], "application/vnd.openstreetmap.data+xml": ["osm"], "application/vnd.openxmlformats-officedocument.presentationml.presentation": ["pptx"], "application/vnd.openxmlformats-officedocument.presentationml.slide": ["sldx"], "application/vnd.openxmlformats-officedocument.presentationml.slideshow": ["ppsx"], "application/vnd.openxmlformats-officedocument.presentationml.template": ["potx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ["xlsx"], "application/vnd.openxmlformats-officedocument.spreadsheetml.template": ["xltx"], "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ["docx"], "application/vnd.openxmlformats-officedocument.wordprocessingml.template": ["dotx"], "application/vnd.osgeo.mapguide.package": ["mgp"], "application/vnd.osgi.dp": ["dp"], "application/vnd.osgi.subsystem": ["esa"], "application/vnd.palm": ["pdb", "pqa", "oprc"], "application/vnd.pawaafile": ["paw"], "application/vnd.pg.format": ["str"], "application/vnd.pg.osasli": ["ei6"], "application/vnd.picsel": ["efif"], "application/vnd.pmi.widget": ["wg"], "application/vnd.pocketlearn": ["plf"], "application/vnd.powerbuilder6": ["pbd"], "application/vnd.previewsystems.box": ["box"], "application/vnd.proteus.magazine": ["mgz"], "application/vnd.publishare-delta-tree": ["qps"], "application/vnd.pvi.ptid1": ["ptid"], "application/vnd.quark.quarkxpress": ["qxd", "qxt", "qwd", "qwt", "qxl", "qxb"], "application/vnd.rar": ["rar"], "application/vnd.realvnc.bed": ["bed"], "application/vnd.recordare.musicxml": ["mxl"], "application/vnd.recordare.musicxml+xml": ["musicxml"], "application/vnd.rig.cryptonote": ["cryptonote"], "application/vnd.rim.cod": ["cod"], "application/vnd.rn-realmedia": ["rm"], "application/vnd.rn-realmedia-vbr": ["rmvb"], "application/vnd.route66.link66+xml": ["link66"], "application/vnd.sailingtracker.track": ["st"], "application/vnd.seemail": ["see"], "application/vnd.sema": ["sema"], "application/vnd.semd": ["semd"], "application/vnd.semf": ["semf"], "application/vnd.shana.informed.formdata": ["ifm"], "application/vnd.shana.informed.formtemplate": ["itp"], "application/vnd.shana.informed.interchange": ["iif"], "application/vnd.shana.informed.package": ["ipk"], "application/vnd.simtech-mindmapper": ["twd", "twds"], "application/vnd.smaf": ["mmf"], "application/vnd.smart.teacher": ["teacher"], "application/vnd.software602.filler.form+xml": ["fo"], "application/vnd.solent.sdkm+xml": ["sdkm", "sdkd"], "application/vnd.spotfire.dxp": ["dxp"], "application/vnd.spotfire.sfs": ["sfs"], "application/vnd.stardivision.calc": ["sdc"], "application/vnd.stardivision.draw": ["sda"], "application/vnd.stardivision.impress": ["sdd"], "application/vnd.stardivision.math": ["smf"], "application/vnd.stardivision.writer": ["sdw", "vor"], "application/vnd.stardivision.writer-global": ["sgl"], "application/vnd.stepmania.package": ["smzip"], "application/vnd.stepmania.stepchart": ["sm"], "application/vnd.sun.wadl+xml": ["wadl"], "application/vnd.sun.xml.calc": ["sxc"], "application/vnd.sun.xml.calc.template": ["stc"], "application/vnd.sun.xml.draw": ["sxd"], "application/vnd.sun.xml.draw.template": ["std"], "application/vnd.sun.xml.impress": ["sxi"], "application/vnd.sun.xml.impress.template": ["sti"], "application/vnd.sun.xml.math": ["sxm"], "application/vnd.sun.xml.writer": ["sxw"], "application/vnd.sun.xml.writer.global": ["sxg"], "application/vnd.sun.xml.writer.template": ["stw"], "application/vnd.sus-calendar": ["sus", "susp"], "application/vnd.svd": ["svd"], "application/vnd.symbian.install": ["sis", "sisx"], "application/vnd.syncml+xml": ["xsm"], "application/vnd.syncml.dm+wbxml": ["bdm"], "application/vnd.syncml.dm+xml": ["xdm"], "application/vnd.syncml.dmddf+xml": ["ddf"], "application/vnd.tao.intent-module-archive": ["tao"], "application/vnd.tcpdump.pcap": ["pcap", "cap", "dmp"], "application/vnd.tmobile-livetv": ["tmo"], "application/vnd.trid.tpt": ["tpt"], "application/vnd.triscape.mxs": ["mxs"], "application/vnd.trueapp": ["tra"], "application/vnd.ufdl": ["ufd", "ufdl"], "application/vnd.uiq.theme": ["utz"], "application/vnd.umajin": ["umj"], "application/vnd.unity": ["unityweb"], "application/vnd.uoml+xml": ["uoml"], "application/vnd.vcx": ["vcx"], "application/vnd.visio": ["vsd", "vst", "vss", "vsw"], "application/vnd.visionary": ["vis"], "application/vnd.vsf": ["vsf"], "application/vnd.wap.wbxml": ["wbxml"], "application/vnd.wap.wmlc": ["wmlc"], "application/vnd.wap.wmlscriptc": ["wmlsc"], "application/vnd.webturbo": ["wtb"], "application/vnd.wolfram.player": ["nbp"], "application/vnd.wordperfect": ["wpd"], "application/vnd.wqd": ["wqd"], "application/vnd.wt.stf": ["stf"], "application/vnd.xara": ["xar"], "application/vnd.xfdl": ["xfdl"], "application/vnd.yamaha.hv-dic": ["hvd"], "application/vnd.yamaha.hv-script": ["hvs"], "application/vnd.yamaha.hv-voice": ["hvp"], "application/vnd.yamaha.openscoreformat": ["osf"], "application/vnd.yamaha.openscoreformat.osfpvg+xml": ["osfpvg"], "application/vnd.yamaha.smaf-audio": ["saf"], "application/vnd.yamaha.smaf-phrase": ["spf"], "application/vnd.yellowriver-custom-menu": ["cmp"], "application/vnd.zul": ["zir", "zirz"], "application/vnd.zzazz.deck+xml": ["zaz"], "application/x-7z-compressed": ["7z"], "application/x-abiword": ["abw"], "application/x-ace-compressed": ["ace"], "application/x-apple-diskimage": ["*dmg"], "application/x-arj": ["arj"], "application/x-authorware-bin": ["aab", "x32", "u32", "vox"], "application/x-authorware-map": ["aam"], "application/x-authorware-seg": ["aas"], "application/x-bcpio": ["bcpio"], "application/x-bdoc": ["*bdoc"], "application/x-bittorrent": ["torrent"], "application/x-blorb": ["blb", "blorb"], "application/x-bzip": ["bz"], "application/x-bzip2": ["bz2", "boz"], "application/x-cbr": ["cbr", "cba", "cbt", "cbz", "cb7"], "application/x-cdlink": ["vcd"], "application/x-cfs-compressed": ["cfs"], "application/x-chat": ["chat"], "application/x-chess-pgn": ["pgn"], "application/x-chrome-extension": ["crx"], "application/x-cocoa": ["cco"], "application/x-conference": ["nsc"], "application/x-cpio": ["cpio"], "application/x-csh": ["csh"], "application/x-debian-package": ["*deb", "udeb"], "application/x-dgc-compressed": ["dgc"], "application/x-director": ["dir", "dcr", "dxr", "cst", "cct", "cxt", "w3d", "fgd", "swa"], "application/x-doom": ["wad"], "application/x-dtbncx+xml": ["ncx"], "application/x-dtbook+xml": ["dtb"], "application/x-dtbresource+xml": ["res"], "application/x-dvi": ["dvi"], "application/x-envoy": ["evy"], "application/x-eva": ["eva"], "application/x-font-bdf": ["bdf"], "application/x-font-ghostscript": ["gsf"], "application/x-font-linux-psf": ["psf"], "application/x-font-pcf": ["pcf"], "application/x-font-snf": ["snf"], "application/x-font-type1": ["pfa", "pfb", "pfm", "afm"], "application/x-freearc": ["arc"], "application/x-futuresplash": ["spl"], "application/x-gca-compressed": ["gca"], "application/x-glulx": ["ulx"], "application/x-gnumeric": ["gnumeric"], "application/x-gramps-xml": ["gramps"], "application/x-gtar": ["gtar"], "application/x-hdf": ["hdf"], "application/x-httpd-php": ["php"], "application/x-install-instructions": ["install"], "application/x-iso9660-image": ["*iso"], "application/x-iwork-keynote-sffkey": ["*key"], "application/x-iwork-numbers-sffnumbers": ["*numbers"], "application/x-iwork-pages-sffpages": ["*pages"], "application/x-java-archive-diff": ["jardiff"], "application/x-java-jnlp-file": ["jnlp"], "application/x-keepass2": ["kdbx"], "application/x-latex": ["latex"], "application/x-lua-bytecode": ["luac"], "application/x-lzh-compressed": ["lzh", "lha"], "application/x-makeself": ["run"], "application/x-mie": ["mie"], "application/x-mobipocket-ebook": ["prc", "mobi"], "application/x-ms-application": ["application"], "application/x-ms-shortcut": ["lnk"], "application/x-ms-wmd": ["wmd"], "application/x-ms-wmz": ["wmz"], "application/x-ms-xbap": ["xbap"], "application/x-msaccess": ["mdb"], "application/x-msbinder": ["obd"], "application/x-mscardfile": ["crd"], "application/x-msclip": ["clp"], "application/x-msdos-program": ["*exe"], "application/x-msdownload": ["*exe", "*dll", "com", "bat", "*msi"], "application/x-msmediaview": ["mvb", "m13", "m14"], "application/x-msmetafile": ["*wmf", "*wmz", "*emf", "emz"], "application/x-msmoney": ["mny"], "application/x-mspublisher": ["pub"], "application/x-msschedule": ["scd"], "application/x-msterminal": ["trm"], "application/x-mswrite": ["wri"], "application/x-netcdf": ["nc", "cdf"], "application/x-ns-proxy-autoconfig": ["pac"], "application/x-nzb": ["nzb"], "application/x-perl": ["pl", "pm"], "application/x-pilot": ["*prc", "*pdb"], "application/x-pkcs12": ["p12", "pfx"], "application/x-pkcs7-certificates": ["p7b", "spc"], "application/x-pkcs7-certreqresp": ["p7r"], "application/x-rar-compressed": ["*rar"], "application/x-redhat-package-manager": ["rpm"], "application/x-research-info-systems": ["ris"], "application/x-sea": ["sea"], "application/x-sh": ["sh"], "application/x-shar": ["shar"], "application/x-shockwave-flash": ["swf"], "application/x-silverlight-app": ["xap"], "application/x-sql": ["sql"], "application/x-stuffit": ["sit"], "application/x-stuffitx": ["sitx"], "application/x-subrip": ["srt"], "application/x-sv4cpio": ["sv4cpio"], "application/x-sv4crc": ["sv4crc"], "application/x-t3vm-image": ["t3"], "application/x-tads": ["gam"], "application/x-tar": ["tar"], "application/x-tcl": ["tcl", "tk"], "application/x-tex": ["tex"], "application/x-tex-tfm": ["tfm"], "application/x-texinfo": ["texinfo", "texi"], "application/x-tgif": ["*obj"], "application/x-ustar": ["ustar"], "application/x-virtualbox-hdd": ["hdd"], "application/x-virtualbox-ova": ["ova"], "application/x-virtualbox-ovf": ["ovf"], "application/x-virtualbox-vbox": ["vbox"], "application/x-virtualbox-vbox-extpack": ["vbox-extpack"], "application/x-virtualbox-vdi": ["vdi"], "application/x-virtualbox-vhd": ["vhd"], "application/x-virtualbox-vmdk": ["vmdk"], "application/x-wais-source": ["src"], "application/x-web-app-manifest+json": ["webapp"], "application/x-x509-ca-cert": ["der", "crt", "pem"], "application/x-xfig": ["fig"], "application/x-xliff+xml": ["*xlf"], "application/x-xpinstall": ["xpi"], "application/x-xz": ["xz"], "application/x-zmachine": ["z1", "z2", "z3", "z4", "z5", "z6", "z7", "z8"], "audio/vnd.dece.audio": ["uva", "uvva"], "audio/vnd.digital-winds": ["eol"], "audio/vnd.dra": ["dra"], "audio/vnd.dts": ["dts"], "audio/vnd.dts.hd": ["dtshd"], "audio/vnd.lucent.voice": ["lvp"], "audio/vnd.ms-playready.media.pya": ["pya"], "audio/vnd.nuera.ecelp4800": ["ecelp4800"], "audio/vnd.nuera.ecelp7470": ["ecelp7470"], "audio/vnd.nuera.ecelp9600": ["ecelp9600"], "audio/vnd.rip": ["rip"], "audio/x-aac": ["aac"], "audio/x-aiff": ["aif", "aiff", "aifc"], "audio/x-caf": ["caf"], "audio/x-flac": ["flac"], "audio/x-m4a": ["*m4a"], "audio/x-matroska": ["mka"], "audio/x-mpegurl": ["m3u"], "audio/x-ms-wax": ["wax"], "audio/x-ms-wma": ["wma"], "audio/x-pn-realaudio": ["ram", "ra"], "audio/x-pn-realaudio-plugin": ["rmp"], "audio/x-realaudio": ["*ra"], "audio/x-wav": ["*wav"], "chemical/x-cdx": ["cdx"], "chemical/x-cif": ["cif"], "chemical/x-cmdf": ["cmdf"], "chemical/x-cml": ["cml"], "chemical/x-csml": ["csml"], "chemical/x-xyz": ["xyz"], "image/prs.btif": ["btif"], "image/prs.pti": ["pti"], "image/vnd.adobe.photoshop": ["psd"], "image/vnd.airzip.accelerator.azv": ["azv"], "image/vnd.dece.graphic": ["uvi", "uvvi", "uvg", "uvvg"], "image/vnd.djvu": ["djvu", "djv"], "image/vnd.dvb.subtitle": ["*sub"], "image/vnd.dwg": ["dwg"], "image/vnd.dxf": ["dxf"], "image/vnd.fastbidsheet": ["fbs"], "image/vnd.fpx": ["fpx"], "image/vnd.fst": ["fst"], "image/vnd.fujixerox.edmics-mmr": ["mmr"], "image/vnd.fujixerox.edmics-rlc": ["rlc"], "image/vnd.microsoft.icon": ["ico"], "image/vnd.ms-dds": ["dds"], "image/vnd.ms-modi": ["mdi"], "image/vnd.ms-photo": ["wdp"], "image/vnd.net-fpx": ["npx"], "image/vnd.pco.b16": ["b16"], "image/vnd.tencent.tap": ["tap"], "image/vnd.valve.source.texture": ["vtf"], "image/vnd.wap.wbmp": ["wbmp"], "image/vnd.xiff": ["xif"], "image/vnd.zbrush.pcx": ["pcx"], "image/x-3ds": ["3ds"], "image/x-cmu-raster": ["ras"], "image/x-cmx": ["cmx"], "image/x-freehand": ["fh", "fhc", "fh4", "fh5", "fh7"], "image/x-icon": ["*ico"], "image/x-jng": ["jng"], "image/x-mrsid-image": ["sid"], "image/x-ms-bmp": ["*bmp"], "image/x-pcx": ["*pcx"], "image/x-pict": ["pic", "pct"], "image/x-portable-anymap": ["pnm"], "image/x-portable-bitmap": ["pbm"], "image/x-portable-graymap": ["pgm"], "image/x-portable-pixmap": ["ppm"], "image/x-rgb": ["rgb"], "image/x-tga": ["tga"], "image/x-xbitmap": ["xbm"], "image/x-xpixmap": ["xpm"], "image/x-xwindowdump": ["xwd"], "message/vnd.wfa.wsc": ["wsc"], "model/vnd.collada+xml": ["dae"], "model/vnd.dwf": ["dwf"], "model/vnd.gdl": ["gdl"], "model/vnd.gtw": ["gtw"], "model/vnd.mts": ["mts"], "model/vnd.opengex": ["ogex"], "model/vnd.parasolid.transmit.binary": ["x_b"], "model/vnd.parasolid.transmit.text": ["x_t"], "model/vnd.sap.vds": ["vds"], "model/vnd.usdz+zip": ["usdz"], "model/vnd.valve.source.compiled-map": ["bsp"], "model/vnd.vtu": ["vtu"], "text/prs.lines.tag": ["dsc"], "text/vnd.curl": ["curl"], "text/vnd.curl.dcurl": ["dcurl"], "text/vnd.curl.mcurl": ["mcurl"], "text/vnd.curl.scurl": ["scurl"], "text/vnd.dvb.subtitle": ["sub"], "text/vnd.fly": ["fly"], "text/vnd.fmi.flexstor": ["flx"], "text/vnd.graphviz": ["gv"], "text/vnd.in3d.3dml": ["3dml"], "text/vnd.in3d.spot": ["spot"], "text/vnd.sun.j2me.app-descriptor": ["jad"], "text/vnd.wap.wml": ["wml"], "text/vnd.wap.wmlscript": ["wmls"], "text/x-asm": ["s", "asm"], "text/x-c": ["c", "cc", "cxx", "cpp", "h", "hh", "dic"], "text/x-component": ["htc"], "text/x-fortran": ["f", "for", "f77", "f90"], "text/x-handlebars-template": ["hbs"], "text/x-java-source": ["java"], "text/x-lua": ["lua"], "text/x-markdown": ["mkd"], "text/x-nfo": ["nfo"], "text/x-opml": ["opml"], "text/x-org": ["*org"], "text/x-pascal": ["p", "pas"], "text/x-processing": ["pde"], "text/x-sass": ["sass"], "text/x-scss": ["scss"], "text/x-setext": ["etx"], "text/x-sfv": ["sfv"], "text/x-suse-ymp": ["ymp"], "text/x-uuencode": ["uu"], "text/x-vcalendar": ["vcs"], "text/x-vcard": ["vcf"], "video/vnd.dece.hd": ["uvh", "uvvh"], "video/vnd.dece.mobile": ["uvm", "uvvm"], "video/vnd.dece.pd": ["uvp", "uvvp"], "video/vnd.dece.sd": ["uvs", "uvvs"], "video/vnd.dece.video": ["uvv", "uvvv"], "video/vnd.dvb.file": ["dvb"], "video/vnd.fvt": ["fvt"], "video/vnd.mpegurl": ["mxu", "m4u"], "video/vnd.ms-playready.media.pyv": ["pyv"], "video/vnd.uvvu.mp4": ["uvu", "uvvu"], "video/vnd.vivo": ["viv"], "video/x-f4v": ["f4v"], "video/x-fli": ["fli"], "video/x-flv": ["flv"], "video/x-m4v": ["m4v"], "video/x-matroska": ["mkv", "mk3d", "mks"], "video/x-mng": ["mng"], "video/x-ms-asf": ["asf", "asx"], "video/x-ms-vob": ["vob"], "video/x-ms-wm": ["wm"], "video/x-ms-wmv": ["wmv"], "video/x-ms-wmx": ["wmx"], "video/x-ms-wvx": ["wvx"], "video/x-msvideo": ["avi"], "video/x-sgi-movie": ["movie"], "video/x-smv": ["smv"], "x-conference/x-cooltalk": ["ice"] };
    }
  });
  
  // node_modules/mime/index.js
  var require_mime2 = __commonJS({
-   "node_modules/mime/index.js"(exports, module) {
+   "node_modules/mime/index.js"(exports, module2) {
      "use strict";
      var Mime = require_Mime();
-     module.exports = new Mime(require_standard(), require_other());
+     module2.exports = new Mime(require_standard(), require_other());
    }
  });
  
  // node_modules/webtorrent/lib/file-stream.js
  var require_file_stream = __commonJS({
-   "node_modules/webtorrent/lib/file-stream.js"(exports, module) {
+   "node_modules/webtorrent/lib/file-stream.js"(exports, module2) {
      var { Readable } = require_streamx();
      var debugFactory = require_src();
      var debug = debugFactory("webtorrent:file-stream");
@@ -28573,16 +28571,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          cb(err);
        }
      };
-     module.exports = FileStream;
+     module2.exports = FileStream;
    }
  });
  
  // node_modules/webtorrent/lib/file.js
  var require_file = __commonJS({
-   "node_modules/webtorrent/lib/file.js"(exports, module) {
-     var EventEmitter = __require("events");
+   "node_modules/webtorrent/lib/file.js"(exports, module2) {
+     var EventEmitter = require("events");
      var { PassThrough } = require_streamx();
-     var path2 = __require("path");
+     var path2 = require("path");
      var render = require_render_media();
      var { BlobWriteStream } = require_fast_blob_stream();
      var streamToBuffer = require_stream_with_known_length_to_buffer();
@@ -28770,13 +28768,13 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this._fileStreams.clear();
        }
      };
-     module.exports = File;
+     module2.exports = File;
    }
  });
  
  // node_modules/webtorrent/lib/rarity-map.js
  var require_rarity_map = __commonJS({
-   "node_modules/webtorrent/lib/rarity-map.js"(exports, module) {
+   "node_modules/webtorrent/lib/rarity-map.js"(exports, module2) {
      var RarityMap = class {
        constructor(torrent) {
          this._torrent = torrent;
@@ -28856,16 +28854,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          wire._onClose = null;
        }
      };
-     module.exports = RarityMap;
+     module2.exports = RarityMap;
    }
  });
  
  // node_modules/escape-html/index.js
  var require_escape_html = __commonJS({
-   "node_modules/escape-html/index.js"(exports, module) {
+   "node_modules/escape-html/index.js"(exports, module2) {
      "use strict";
      var matchHtmlRegExp = /["'&<>]/;
-     module.exports = escapeHtml;
+     module2.exports = escapeHtml;
      function escapeHtml(string) {
        var str = "" + string;
        var match = matchHtmlRegExp.exec(str);
@@ -28909,8 +28907,8 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/webtorrent/lib/server.js
  var require_server = __commonJS({
-   "node_modules/webtorrent/lib/server.js"(exports, module) {
-     var http = __require("http");
+   "node_modules/webtorrent/lib/server.js"(exports, module2) {
+     var http = require("http");
      var escapeHtml = require_escape_html();
      var mime = require_mime2();
      var pump = require_pump();
@@ -29116,14 +29114,14 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function encodeRFC5987(str) {
        return encodeURIComponent(str).replace(/['()]/g, escape).replace(/\*/g, "%2A").replace(/%(?:7C|60|5E)/g, unescape);
      }
-     module.exports = Server;
+     module2.exports = Server;
    }
  });
  
  // node_modules/webtorrent/package.json
  var require_package = __commonJS({
-   "node_modules/webtorrent/package.json"(exports, module) {
-     module.exports = {
+   "node_modules/webtorrent/package.json"(exports, module2) {
+     module2.exports = {
        name: "webtorrent",
        description: "Streaming torrent client",
        version: "1.9.6",
@@ -29308,7 +29306,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  
  // node_modules/webtorrent/lib/webconn.js
  var require_webconn = __commonJS({
-   "node_modules/webtorrent/lib/webconn.js"(exports, module) {
+   "node_modules/webtorrent/lib/webconn.js"(exports, module2) {
      var { default: BitField } = require_lib2();
      var debugFactory = require_src();
      var get = require_simple_get();
@@ -29495,18 +29493,18 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          this._torrent = null;
        }
      };
-     module.exports = WebConn;
+     module2.exports = WebConn;
    }
  });
  
  // node_modules/webtorrent/lib/torrent.js
  var require_torrent = __commonJS({
-   "node_modules/webtorrent/lib/torrent.js"(exports, module) {
-     var EventEmitter = __require("events");
-     var fs2 = __require("fs");
-     var net = __require("net");
-     var os2 = __require("os");
-     var path2 = __require("path");
+   "node_modules/webtorrent/lib/torrent.js"(exports, module2) {
+     var EventEmitter = require("events");
+     var fs2 = require("fs");
+     var net = require("net");
+     var os2 = require("os");
+     var path2 = require("path");
      var addrToIPPort = require_addr_to_ip_port();
      var { default: BitField } = require_lib2();
      var CacheChunkStore = require_cache_chunk_store();
@@ -31078,15 +31076,15 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      }
      function noop2() {
      }
-     module.exports = Torrent;
+     module2.exports = Torrent;
    }
  });
  
  // node_modules/webtorrent/index.js
  var require_webtorrent = __commonJS({
-   "node_modules/webtorrent/index.js"(exports, module) {
-     var EventEmitter = __require("events");
-     var path2 = __require("path");
+   "node_modules/webtorrent/index.js"(exports, module2) {
+     var EventEmitter = require("events");
+     var path2 = require("path");
      var concat = require_simple_concat();
      var createTorrent = require_create_torrent();
      var debugFactory = require_src();
@@ -31538,34 +31536,40 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
      function isFileList(obj) {
        return typeof FileList !== "undefined" && obj instanceof FileList;
      }
-     module.exports = WebTorrent2;
+     module2.exports = WebTorrent2;
    }
  });
  
  // src/index.js
+ var src_exports = {};
+ __export(src_exports, {
+   FSChunkStore: () => Storage,
+   WebTorrent: () => import_webtorrent.default
+ });
+ module.exports = __toCommonJS(src_exports);
  var import_webtorrent = __toESM(require_webtorrent());
  
  // node_modules/fs-chunk-store/index.js
+ var import_fs = __toESM(require("fs"), 1);
+ var import_os = __toESM(require("os"), 1);
  var import_run_parallel = __toESM(require_run_parallel(), 1);
+ var import_path = __toESM(require("path"), 1);
  var import_queue_microtask = __toESM(require_queue_microtask(), 1);
  var import_random_access_file = __toESM(require_random_access_file(), 1);
  var import_randombytes = __toESM(require_randombytes(), 1);
  var import_thunky = __toESM(require_thunky(), 1);
- import fs from "fs";
- import os from "os";
- import path from "path";
  var TMP;
  try {
-   TMP = fs.statSync("/tmp") && "/tmp";
+   TMP = import_fs.default.statSync("/tmp") && "/tmp";
  } catch (err) {
-   TMP = os.tmpdir();
+   TMP = import_os.default.tmpdir();
  }
  var Storage = class {
    constructor(chunkLength, opts = {}) {
      this.chunkLength = Number(chunkLength);
      if (!this.chunkLength)
        throw new Error("First argument must be a chunk length");
-     this.name = opts.name || path.join("fs-chunk-store", (0, import_randombytes.default)(20).toString("hex"));
+     this.name = opts.name || import_path.default.join("fs-chunk-store", (0, import_randombytes.default)(20).toString("hex"));
      this.addUID = opts.addUID;
      if (opts.files) {
        this.path = opts.path;
@@ -31587,7 +31591,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
          }
          let newPath = file.path;
          if (this.path) {
-           newPath = this.addUID ? path.resolve(path.join(this.path, this.name, file.path)) : path.resolve(path.join(this.path, file.path));
+           newPath = this.addUID ? import_path.default.resolve(import_path.default.join(this.path, this.name, file.path)) : import_path.default.resolve(import_path.default.join(this.path, file.path));
          }
          return { path: newPath, length: file.length, offset: file.offset };
        });
@@ -31601,7 +31605,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        const len = Number(opts.length) || Infinity;
        this.files = [{
          offset: 0,
-         path: path.resolve(opts.path || path.join(TMP, this.name)),
+         path: import_path.default.resolve(opts.path || import_path.default.join(TMP, this.name)),
          length: len
        }];
        this.length = len;
@@ -31612,7 +31616,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
        file.open = (0, import_thunky.default)((cb) => {
          if (this.closed)
            return cb(new Error("Storage is closed"));
-         fs.mkdir(path.dirname(file.path), { recursive: true }, (err) => {
+         import_fs.default.mkdir(import_path.default.dirname(file.path), { recursive: true }, (err) => {
            if (err)
              return cb(err);
            if (this.closed)
@@ -31760,11 +31764,11 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
    destroy(cb) {
      this.close(() => {
        if (this.addUID && this.path) {
-         fs.rm(path.resolve(path.join(this.path, this.name)), { recursive: true, maxBusyTries: 10 }, cb);
+         import_fs.default.rm(import_path.default.resolve(import_path.default.join(this.path, this.name)), { recursive: true, maxBusyTries: 10 }, cb);
        } else {
          const tasks = this.files.map((file) => {
            return (cb2) => {
-             fs.rm(file.path, { recursive: true, maxRetries: 10 }, (err) => {
+             import_fs.default.rm(file.path, { recursive: true, maxRetries: 10 }, (err) => {
                err && err.code === "ENOENT" ? cb2() : cb2(err);
              });
            };
@@ -31782,7 +31786,7 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  }
  function noop() {
  }
- var export_WebTorrent = import_webtorrent.default;
+
 
  /*!
   * escape-html
@@ -31828,11 +31832,16 @@ import { isMainThread, parentPort, workerData } from "worker_threads";
  /*! ut_pex. MIT License. WebTorrent LLC <https://webtorrent.io/opensource> */
  /*! webtorrent. MIT License. WebTorrent LLC <https://webtorrent.io/opensource> */
  
+
 /************************************************************************************
  * MERGE
  *********************************************************************************/
 
-const MessageType = {
+ const MessageType = {
+  DOWNLOAD_NO_PEERS: "DOWNLOAD_NO_PEERS",
+  DOWNLOAD_WARNING: "DOWNLOAD_WARNING",
+  DOWNLOAD_METADATA: "DOWNLOAD_METADATA",
+  DOWNLOAD_INFOHASH: "DOWNLOAD_INFOHASH",
   UPLOAD_PROGRESS: "UPLOAD_PROGRESS",
   DOWNLOAD_PROGRESS: "DOWNLOAD_PROGRESS",
   DOWNLOAD_FINISHED: "DOWNLOAD_FINISHED",
@@ -31846,7 +31855,7 @@ if (!isMainThread) {
   const THROTTLE_BYTES = 5 * 1e6; // 5mb in bytes
 
   // Create a webtorrent client
-  const client = new export_WebTorrent();
+  const client = new import_webtorrent.default();
 
   client.add(
     magnetLink,
@@ -31877,7 +31886,7 @@ if (!isMainThread) {
 
       // Throttle progress messages
       let _uploadBytes = 0;
-      torrent.on("uploaded", function (bytes) {
+      torrent.on("upload", function (bytes) {
         _uploadBytes += bytes;
 
         if (_uploadBytes >= THROTTLE_BYTES) {
@@ -31895,17 +31904,6 @@ if (!isMainThread) {
       });
 
       torrent.on("done", function () {
-        // Set the last progress update so it fills to 100%
-        parentPort.postMessage({
-          type: MessageType.DOWNLOAD_PROGRESS,
-          data: {
-            magnetLink,
-            downloaded: torrent.downloaded,
-            downloadSpeed: torrent.downloadSpeed,
-            progress: torrent.progress,
-          },
-        });
-
         parentPort.postMessage({
           type: MessageType.DOWNLOAD_FINISHED,
           data: {
@@ -31919,6 +31917,38 @@ if (!isMainThread) {
           type: MessageType.DOWNLOAD_ERROR,
           data: {
             error,
+          },
+        });
+      });
+
+      torrent.on("infoHash", function () {
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_INFOHASH,
+          data: {},
+        });
+      });
+
+      torrent.on("metadata", function () {
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_METADATA,
+          data: {},
+        });
+      });
+
+      torrent.on("warning", function (error) {
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_WARNING,
+          data: {
+            error,
+          },
+        });
+      });
+
+      torrent.on("noPeers", function (announceType) {
+        parentPort.postMessage({
+          type: MessageType.DOWNLOAD_NO_PEERS,
+          data: {
+            announceType,
           },
         });
       });
