@@ -1,5 +1,9 @@
 import { Worker } from "worker_threads";
 const MessageType = {
+  DOWNLOAD_NO_PEERS: "DOWNLOAD_NO_PEERS",
+  DOWNLOAD_WARNING: "DOWNLOAD_WARNING",
+  DOWNLOAD_METADATA: "DOWNLOAD_METADATA",
+  DOWNLOAD_INFOHASH: "DOWNLOAD_INFOHASH",
   UPLOAD_PROGRESS: "UPLOAD_PROGRESS",
   DOWNLOAD_PROGRESS: "DOWNLOAD_PROGRESS",
   DOWNLOAD_FINISHED: "DOWNLOAD_FINISHED",
@@ -21,7 +25,7 @@ export const downloadTorrent = ({
     const worker = new Worker(
       // eslint-disable-next-line
       // @ts-ignore
-      new URL("./torrent_worker.mjs", import.meta.url),
+      new URL("./torrent_worker.js", import.meta.url),
       {
         workerData: { magnetLink, path },
       }
@@ -36,7 +40,7 @@ export const downloadTorrent = ({
     worker.on(
       "message",
       (message: { type: keyof typeof MessageType; data: any }) => {
-        // console.log("message", message);
+         console.log("message", message);
 
         switch (message.type) {
           case MessageType.DOWNLOAD_FINISHED:
