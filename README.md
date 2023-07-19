@@ -16,3 +16,8 @@ Currently, the built (`npm run make`) version fails to download a torrent. This 
 - Logs are written to `%AppData%\Roaming\webtorrent-test\logs\main.log`. This is helpful to debug errors and logs in the `make` exe.
 - Downloads are saved in your system's Downloads folder (eg: `C:\Users\Flam\Downloads\`)
 - This tries to download a folder for a video called `Cosmos Laundromat` in your downloads folder. It works with `npm run start` but not with `npm run main`.
+
+
+## Fix
+
+My fix / workaround can be seen here https://github.com/HorizonFFXI/webtorrent-node-demo/pull/2
